@@ -1,10 +1,10 @@
-# Yenkee 3700 Rogue Keyboard Protocol Documentation
+# Yenkee YKB3700 Rogue Keyboard Protocol Documentation
 
-![Yenkee 3700 Rogue Keyboard](./images/YKB3700CZ.png)
+![Yenkee YKB3700 Rogue Keyboard](./images/YKB3700CZ.png)
 
 ## Reverse Engineering Project
 
-This comprehensive documentation is the result of meticulous reverse engineering of the Yenkee 3700 Rogue (OEM ROGYUAN) keyboard protocol. Unlike many manufacturers who provide open APIs or cross-platform support, the vendor only offers proprietary Windows software, effectively locking out Linux, macOS, and other operating system users from customizing their RGB lighting experience.
+This comprehensive documentation is the result of meticulous reverse engineering of the Yenkee YKB3700 Rogue (OEM ROYUAN) keyboard protocol. Unlike many manufacturers who provide open APIs or cross-platform support, the vendor only offers proprietary Windows software, effectively locking out Linux, macOS, and other operating system users from customizing their RGB lighting experience.
 
 **Our mission:** To liberate this excellent mechanical keyboard from its Windows-only shackles and empower the open-source community with complete control over its RGB lighting capabilities.
 
