@@ -386,3 +386,236 @@ The sequence number in the header decreases with each packet (72, 71, 70, ..., 6
 - Maintain correct packet order
 - Respect overflow between packets
 - Test with hardware reset capability available
+
+---
+
+## Yenkee 3700 Rogue Keyboard Key Remapping Protocol
+
+### Overview
+
+This document describes the USB HID protocol for key remapping, macro assignment (not yet documented), and key disable functionality on the Yenkee 3700 Rogue keyboard. The protocol allows complete customization of the keyboard layout by reassigning scan codes and modifiers to physical key positions.
+
+### Packet Structure
+
+#### Basic Format
+- **Total packets per configuration:** 9
+- **Each packet size:** 64 bytes
+- **Packet header:** `0900f801[SEQ]000000[CHECKSUM]`
+- **Key data:** 14 key positions × 4 bytes each = 56 bytes
+
+#### Packet Headers
+- Packet 0: 0900f801000000fd
+- Packet 1: 0900f801010000fc
+- Packet 2: 0900f801020000fb
+- Packet 3: 0900f801030000fa
+- Packet 4: 0900f801040000f9
+- Packet 5: 0900f801050000f8
+- Packet 6: 0900f801060000f7
+- Packet 7: 0900f801070000f6
+- Packet 8: 0900f801080000f5
+
+
+### Key Position Structure
+
+Each key position uses 4 bytes in the following format:
+
+```
+[MOD2] [MOD1] [SCANCODE] [00]
+```
+
+| Byte | Description | Values |
+|------|-------------|---------|
+| 0 | **Second Modifier** | Modifier scan code (see table below) |
+| 1 | **First Modifier** | Modifier scan code (see table below) |
+| 2 | **Key Scan Code** | Primary key scan code (see table below) |
+| 3 | **Terminator/Reserved** | Always `0x00` |
+
+### Modifier Scan Codes
+
+| Modifier | Scan Code | Description |
+|----------|-----------|-------------|
+| L-Ctrl | `0xe0` | Left Control |
+| L-Shift | `0xe1` | Left Shift |
+| L-Alt | `0xe2` | Left Alt |
+| L-Meta | `0xe3` | Left Windows/Command |
+| R-Ctrl | `0xe4` | Right Control |
+| R-Shift | `0xe5` | Right Shift |
+| R-Alt | `0xe6` | Right Alt |
+| Fn | `0x0a01` | Function key (special format) |
+
+### Important Rules
+
+1. **Modifier Order**: Modifiers must be placed immediately before the main scan code
+2. **Multiple Modifiers**: Up to 2 modifiers can be combined (order doesn't matter)
+3. **Key Disable**: Use `00000000` to disable a physical key
+4. **Fn Key**: Special value `0a010000` - should not be remapped
+5. **Reserved Positions**: Marked as DISABLED in default mapping
+
+### Default Key Mapping
+
+### Packet 0 - Positions 0-13
+| Pos | Physical Key | Default Mapping | Mod2 | Mod1 | Scan Code |
+|-----|--------------|-----------------|------|------|-----------|
+| 0 | ESC | ESC | `0x00` | `0x00` | `0x29` |
+| 1 | Grave | Grave | `0x00` | `0x00` | `0x35` |
+| 2 | TAB | TAB | `0x00` | `0x00` | `0x2b` |
+| 3 | CAPS | CAPS | `0x00` | `0x00` | `0x39` |
+| 4 | L-SHIFT | L-SHIFT | `0x00` | `0x00` | `0xe1` |
+| 5 | L-CTRL | L-CTRL | `0x00` | `0x00` | `0xe0` |
+| 6 | - | DISABLED | `0x00` | `0x00` | `0x00` |
+| 7 | 1 | 1 | `0x00` | `0x00` | `0x1e` |
+| 8 | Q | Q | `0x00` | `0x00` | `0x14` |
+| 9 | A | A | `0x00` | `0x00` | `0x04` |
+| 10 | \\ | \\ | `0x00` | `0x00` | `0x64` |
+| 11 | - | DISABLED | `0x00` | `0x00` | `0x00` |
+| 12 | F1 | F1 | `0x00` | `0x00` | `0x3a` |
+| 13 | 2 | 2 | `0x00` | `0x00` | `0x1f` |
+
+### Packet 1 - Positions 14-27
+| Pos | Physical Key | Default Mapping |
+|-----|--------------|-----------------|
+| 14 | W | W (`0x1a`) |
+| 15 | S | S (`0x16`) |
+| 16 | Z | Z (`0x1d`) |
+| 17 | L-META | L-META (`0xe3`) |
+| 18 | F2 | F2 (`0x3b`) |
+| 19 | 3 | 3 (`0x20`) |
+| 20 | E | E (`0x08`) |
+| 21 | D | D (`0x07`) |
+| 22 | X | X (`0x1b`) |
+| 23 | L-ALT | L-ALT (`0xe2`) |
+| 24 | F3 | F3 (`0x3c`) |
+| 25 | 4 | 4 (`0x21`) |
+| 26 | R | R (`0x15`) |
+| 27 | F | F (`0x09`) |
+
+### Packet 2 - Positions 28-41
+| Pos | Physical Key | Default Mapping |
+|-----|--------------|-----------------|
+| 28 | C | C (`0x06`) |
+| 29 | - | DISABLED |
+| 30 | F4 | F4 (`0x3d`) |
+| 31 | 5 | 5 (`0x22`) |
+| 32 | T | T (`0x17`) |
+| 33 | G | G (`0x0a`) |
+| 34 | V | V (`0x19`) |
+| 35 | - | DISABLED |
+| 36 | F5 | F5 (`0x3e`) |
+| 37 | 6 | 6 (`0x23`) |
+| 38 | Y | Y (`0x1c`) |
+| 39 | H | H (`0x0b`) |
+| 40 | B | B (`0x05`) |
+| 41 | SPACE | SPACE (`0x2c`) |
+
+### Packet 3 - Positions 42-55
+| Pos | Physical Key | Default Mapping |
+|-----|--------------|-----------------|
+| 42 | F6 | F6 (`0x3f`) |
+| 43 | 7 | 7 (`0x24`) |
+| 44 | U | U (`0x18`) |
+| 45 | J | J (`0x0d`) |
+| 46 | N | N (`0x11`) |
+| 47 | R-ALT | R-ALT (`0xe6`) |
+| 48 | F7 | F7 (`0x40`) |
+| 49 | 8 | 8 (`0x25`) |
+| 50 | I | I (`0x0c`) |
+| 51 | K | K (`0x0e`) |
+| 52 | M | M (`0x10`) |
+| 53 | FN | FN (`0x0a01`) |
+| 54 | F8 | F8 (`0x41`) |
+| 55 | 9 | 9 (`0x26`) |
+
+### Packet 4 - Positions 56-69
+| Pos | Physical Key | Default Mapping |
+|-----|--------------|-----------------|
+| 56 | O | O (`0x12`) |
+| 57 | L | L (`0x0f`) |
+| 58 | , | , (`0x36`) |
+| 59 | R-CTRL | R-CTRL (`0xe4`) |
+| 60 | F9 | F9 (`0x42`) |
+| 61 | 0 | 0 (`0x27`) |
+| 62 | P | P (`0x13`) |
+| 63 | ; | ; (`0x33`) |
+| 64 | . | . (`0x37`) |
+| 65 | LEFT | LEFT (`0x50`) |
+| 66 | F10 | F10 (`0x43`) |
+| 67 | - | - (`0x2d`) |
+| 68 | [ | [ (`0x2f`) |
+| 69 | ' | ' (`0x34`) |
+
+### Packet 5 - Positions 70-83
+| Pos | Physical Key | Default Mapping |
+|-----|--------------|-----------------|
+| 70 | / | / (`0x38`) |
+| 71 | DOWN | DOWN (`0x51`) |
+| 72 | F11 | F11 (`0x44`) |
+| 73 | = | = (`0x2e`) |
+| 74 | ] | ] (`0x30`) |
+| 75 | #/~ | #/~ (`0x32`) |
+| 76 | R-SHIFT | R-SHIFT (`0xe5`) |
+| 77 | RIGHT | RIGHT (`0x4f`) |
+| 78 | F12 | F12 (`0x45`) |
+| 79 | BCKSPACE | BCKSPACE (`0x2a`) |
+| 80 | \\ | \\ (`0x31`) |
+| 81 | ENTER | ENTER (`0x28`) |
+| 82 | UP | UP (`0x52`) |
+| 83 | INS | INS (`0x49`) |
+
+### Packet 6 - Positions 84-97
+| Pos | Physical Key | Default Mapping |
+|-----|--------------|-----------------|
+| 84 | PRTSC | PRTSC (`0x46`) |
+| 85 | HOME | HOME (`0x4a`) |
+| 86 | END | END (`0x4d`) |
+| 87 | PGUP | PGUP (`0x4b`) |
+| 88 | PGDOWN | PGDOWN (`0x4e`) |
+| 89 | DEL | DEL (`0x4c`) |
+| 90-97 | - | DISABLED |
+
+### Packets 7-8 - Positions 98-125
+| Pos | Physical Key | Default Mapping |
+|-----|--------------|-----------------|
+| 98-125 | - | DISABLED |
+
+### Examples
+
+#### Remap ESC to Alt+F1
+
+Original: `00002900` → Modified: `00e23a00`
+
+- Mod2: `0x00` (none)
+- Mod1: `0xe2` (Left Alt)
+- Scan Code: `0x3a` (F1)
+
+#### Disable CAPS Lock
+
+Original: `00003900` → Modified: `00000000`
+
+#### Remap Q to Ctrl+Shift+T
+
+Original: `00001400` → Modified: `e0e11700`
+
+- Mod2: `0xe0` (Left Control)
+- Mod1: `0xe1` (Left Shift) 
+- Scan Code: `0x17` (T)
+
+#### Complete Packet Example (ESC → Alt+F1) - first packet
+
+`0900f801000000fd00e23a000000350000002b00000039000000e1000000e0000000000000001e000000140000000400000064000000000000003a0000001f00`
+
+## Implementation Notes
+
+- Always send all 9 packets for a complete configuration
+- Maintain the exact packet order (0-8)
+- Reserved positions should remain as `00000000`
+- The Fn key uses special encoding and should not be remapped
+- Modifiers (more than one) can be combined in any order (`e0e23a` = `e2e03a` = Ctrl+Alt+F1)
+
+## Scan Code Reference
+
+Common scan codes used in the default mapping:
+- Letters: A=`0x04`, B=`0x05`, C=`0x06`, ..., Z=`0x1d`
+- Numbers: 1=`0x1e`, 2=`0x1f`, ..., 0=`0x27`
+- Function Keys: F1=`0x3a`, F2=`0x3b`, ..., F12=`0x45`
+- Navigation: LEFT=`0x50`, RIGHT=`0x4f`, UP=`0x52`, DOWN=`0x51`
+- Special: ENTER=`0x28`, SPACE=`0x2c`, TAB=`0x2b`, ESC=`0x29`
