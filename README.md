@@ -582,6 +582,9 @@ Each key position uses 4 bytes in the following format:
 |-----|--------------|-----------------|
 | 98-125 | - | DISABLED |
 
+![Yenkee YKB3700 Rogue Keyboard](./images/yenkee-ykb3700-scancodes-keymap-reference.png)
+*Reference map showing physical key positions as used in the USB HID packets for key remapping on the Yenkee YKB3700 Rogue.*
+
 ### Examples
 
 #### Remap ESC to Alt+F1
