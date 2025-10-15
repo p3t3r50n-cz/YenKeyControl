@@ -425,8 +425,14 @@ This document describes the USB HID protocol for key remapping, macro assignment
 
 Each key position uses 4 bytes in the following format:
 
+**Common Keys (scancodes):**
 ```
 [MOD2] [MOD1] [SCANCODE] [00]
+```
+
+**Multimedia Keys:**
+```
+[00-03] [00] [CODE]
 ```
 
 | Byte | Description | Values |
@@ -459,7 +465,7 @@ Each key position uses 4 bytes in the following format:
 
 ### Default Key Mapping
 
-### Packet 0 - Positions 0-13
+#### Packet 0 - Positions 0-13
 | Pos | Physical Key | Default Mapping | Mod2 | Mod1 | Scan Code |
 |-----|--------------|-----------------|------|------|-----------|
 | 0 | ESC | ESC | `0x00` | `0x00` | `0x29` |
@@ -477,7 +483,7 @@ Each key position uses 4 bytes in the following format:
 | 12 | F1 | F1 | `0x00` | `0x00` | `0x3a` |
 | 13 | 2 | 2 | `0x00` | `0x00` | `0x1f` |
 
-### Packet 1 - Positions 14-27
+#### Packet 1 - Positions 14-27
 | Pos | Physical Key | Default Mapping |
 |-----|--------------|-----------------|
 | 14 | W | W (`0x1a`) |
@@ -495,7 +501,7 @@ Each key position uses 4 bytes in the following format:
 | 26 | R | R (`0x15`) |
 | 27 | F | F (`0x09`) |
 
-### Packet 2 - Positions 28-41
+#### Packet 2 - Positions 28-41
 | Pos | Physical Key | Default Mapping |
 |-----|--------------|-----------------|
 | 28 | C | C (`0x06`) |
@@ -513,25 +519,7 @@ Each key position uses 4 bytes in the following format:
 | 40 | B | B (`0x05`) |
 | 41 | SPACE | SPACE (`0x2c`) |
 
-### Packet 3 - Positions 42-55
-| Pos | Physical Key | Default Mapping |
-|-----|--------------|-----------------|
-| 42 | F6 | F6 (`0x3f`) |
-| 43 | 7 | 7 (`0x24`) |
-| 44 | U | U (`0x18`) |
-| 45 | J | J (`0x0d`) |
-| 46 | N | N (`0x11`) |
-| 47 | R-ALT | R-ALT (`0xe6`) |
-| 48 | F7 | F7 (`0x40`) |
-| 49 | 8 | 8 (`0x25`) |
-| 50 | I | I (`0x0c`) |
-| 51 | K | K (`0x0e`) |
-| 52 | M | M (`0x10`) |
-| 53 | FN | FN (`0x0a01`) |
-| 54 | F8 | F8 (`0x41`) |
-| 55 | 9 | 9 (`0x26`) |
-
-### Packet 4 - Positions 56-69
+##### Packet 4 - Positions 56-69
 | Pos | Physical Key | Default Mapping |
 |-----|--------------|-----------------|
 | 56 | O | O (`0x12`) |
@@ -549,7 +537,7 @@ Each key position uses 4 bytes in the following format:
 | 68 | [ | [ (`0x2f`) |
 | 69 | ' | ' (`0x34`) |
 
-### Packet 5 - Positions 70-83
+#### Packet 5 - Positions 70-83
 | Pos | Physical Key | Default Mapping |
 |-----|--------------|-----------------|
 | 70 | / | / (`0x38`) |
@@ -567,7 +555,7 @@ Each key position uses 4 bytes in the following format:
 | 82 | UP | UP (`0x52`) |
 | 83 | INS | INS (`0x49`) |
 
-### Packet 6 - Positions 84-97
+#### Packet 6 - Positions 84-97
 | Pos | Physical Key | Default Mapping |
 |-----|--------------|-----------------|
 | 84 | PRTSC | PRTSC (`0x46`) |
@@ -578,10 +566,84 @@ Each key position uses 4 bytes in the following format:
 | 89 | DEL | DEL (`0x4c`) |
 | 90-97 | - | DISABLED |
 
-### Packets 7-8 - Positions 98-125
+#### Packets 7-8 - Positions 98-125
 | Pos | Physical Key | Default Mapping |
 |-----|--------------|-----------------|
 | 98-125 | - | DISABLED |
+
+### Special Function Events
+
+The keyboard supports multimedia and special functions beyond standard key remapping. These functions use extended 4-byte codes in the key position format.
+
+#### Media Controls (`03 00 [function] 00`)
+
+| Function | Code | XF86 Symbol |
+|----------|------|-------------|
+| Play/Pause | 0300cd00 | XF86AudioPlay |
+| Stop | 0300b700 | XF86AudioStop |
+| Previous Track | 0300b600 | XF86AudioPrev |
+| Next Track | 0300b500 | XF86AudioNext |
+| Volume Down | 0300ea00 | XF86AudioLowerVolume |
+| Volume Up | 0300e900 | XF86AudioRaiseVolume |
+| Mute | 0300e200 | XF86AudioMute |
+
+#### Display DPMS Controls (`03 00 [function] 00`)
+
+| Function | Code | XF86 Symbol |
+|----------|------|-------------|
+| Brightness Up | 03006f00 | XF86MonBrightnessUp |
+| Brightness Down | 03007000 | XF86MonBrightnessDown |
+
+#### Application Launchers (`03 00 [function] 01`)
+
+| Function | Code | XF86 Symbol |
+|----------|------|-------------|
+| Media Player | 03008301 | XF86Tools |
+| Calculator | 03009201 | XF86Calculator |
+| Email | 03008a01 | XF86Mail |
+| My Computer | 03009401 | XF86Explorer |
+
+#### System Functions (`03 00 [function] 02`)
+
+| Function | Code | XF86 Symbol |
+|----------|------|-------------|
+| Search | 03002102 | XF86Search |
+| Browser (HomePage) | 03002302 | XF86HomePage |
+| Reload | 03002702 | XF86Reload |
+
+#### Zoom Functions (`00 00 e3 [data]`)
+
+| Function | Code | Triggering |
+|----------|------|-------------|
+| Zoom-in | 0000e32d | `keycode 133 (keysym 0xffeb, Super_L)` + `keycode 20 (keysym 0x2d, minus)` |
+| Zoom-out | 0000e32e | `keycode 133 (keysym 0xffeb, Super_L)` + `keycode 21 (keysym 0x3d, equal)` |
+
+#### Mouse Functions (`01 00 [function] [data]`)
+
+| Function | Code | XF86 Symbol |
+|----------|------|-------------|
+| Mouse Move Left | 0100f000 | - UNKNOWN - |
+| Mouse Move Right | 0100f100 | - UNKNOWN - |
+| Mouse Move Center | 0100f200 | - UNKNOWN - |
+| Mouse Move Left-Up | 0100f400 | - UNKNOWN - |
+| Mouse Move Left-Down | 0100f300 | - UNKNOWN - |
+| Mouse Scroll Up | 0100f501 | - UNKNOWN - |
+| Mouse Scroll Down | 0100f5ff | - UNKNOWN - |
+
+  ##### Mouse Functions Note
+
+  ⚠️ **Important**: Mouse movement and scrolling functions (`01 00 f0 00` - `01 00 f5 ff`) have been found to be non-functional in testing on both Windows and Linux systems. While these event codes are present in the protocol, they do not appear to be implemented in the keyboard firmware.
+
+  These mouse-related events are included in the documentation for completeness, but users should be aware they likely will not work in practice.
+
+### Special Events - Usage Examples
+
+Remap a key to special function in key mapping packets:
+```
+# Remap ESC to Volume Up
+0900f801000000fd [0300e900] 0000350000002b00...
+# Remap ESC to Browser
+0900f801000000fd [03002302] 0000350000002b00...
 
 ![Yenkee YKB3700 Rogue Keyboard](./images/yenkee-ykb3700-scancodes-keymap-reference.png)
 *Reference map showing physical key positions as used in the USB HID packets for key remapping on the Yenkee YKB3700 Rogue.*
