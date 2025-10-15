@@ -20,8 +20,9 @@ The protocol was reverse engineered using:
 
 This documentation is divided into two main sections:
 
-1. **Lighting Effects Protocol** - Control global effects, colors, brightness, and animation speeds
-2. **Per-Key RGB Control** - Individual key color programming (see separate documentation)
+1. [**Lighting Effects Protocol**](#lighting-effects-protocol) - Control global effects, colors, brightness, and animation speeds
+2. [**Per-Key RGB Control**](#user-mode-backlight-protocol---setting-custom-color-for-each-key) - Individual key color programming (see separate documentation)
+3. [**Per-Key remapping**](#yenkee-3700-rogue-keyboard-key-remapping-protocol) - Describes the options for reassigning individual keys to different functions (e.g., sending different scancodes)
 
 ### What We've Uncovered
 
@@ -46,7 +47,7 @@ This documentation enables:
 
 This documentation was created through clean-room reverse engineering for interoperability purposes. All trademarks remain property of their respective owners. This project aims to enhance user experience, not circumvent legitimate copyright protections.
 
-*Join us in celebrating the spirit of open hardware and software freedom! Feel free to modify or for :-)*
+*Join us in celebrating the spirit of open hardware and software freedom! Feel free to modify or fork :-)*
 
 *Continue reading to explore the complete lighting effects protocol...*
 
