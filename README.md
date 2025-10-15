@@ -322,6 +322,9 @@ The Yenkee 3700 Rogue keyboard uses a proprietary USB HID protocol for RGB light
 | 89 | Del | Row 6, Column 14 |
 | 90-147 | NOT_APPLICABLE | Reserved |
 
+![Yenkee YKB3700 Rogue Keyboard](./images/yenkee-ykb3700-rgb-keymap-ref.png)
+*Reference layout of the Yenkee YKB3700 Rogue keyboard showing key indices as used in the device’s HID RGB configuration packets.*
+
 ### RGB Data Format
 
 #### RGB Value Structure
