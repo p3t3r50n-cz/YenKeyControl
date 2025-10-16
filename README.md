@@ -229,99 +229,99 @@ The Yenkee 3700 Rogue keyboard uses a proprietary USB HID protocol for RGB light
 
 #### Complete Position List (0-147)
 
-| Position | Key | Notes |
-|----------|-----|-------|
-| 0 | ESC | Row 1, Column 0 |
-| 1 | Grave (`, ~) | Row 2, Column 0 |
-| 2 | Tab | Row 3, Column 0 |
-| 3 | Caps Lock | Row 4, Column 0 |
-| 4 | L-Shift | Row 5, Column 0 |
-| 5 | L-Ctrl | Row 6, Column 0 |
-| 6 | NOT_APPLICABLE | Reserved |
-| 7 | 1 | Row 2, Column 1 |
-| 8 | Q | Row 3, Column 1 |
-| 9 | A | Row 4, Column 1 |
-| 10 | NOT_APPLICABLE | Reserved |
-| 11 | NOT_APPLICABLE | Reserved |
-| 12 | F1 | Row 1, Column 1 |
-| 13 | 2 | Row 2, Column 2 |
-| 14 | W | Row 3, Column 2 |
-| 15 | S | Row 4, Column 2 |
-| 16 | Z | Row 5, Column 2 |
-| 17 | L-Meta (Win) | Row 6, Column 2 |
-| 18 | F2 | Row 1, Column 2 |
-| 19 | 3 | Row 2, Column 3 |
-| 20 | E | Row 3, Column 3 |
-| 21 | D | Row 4, Column 3 |
-| 22 | X | Row 5, Column 3 |
-| 23 | L-Alt | Row 6, Column 3 |
-| 24 | F3 | Row 1, Column 3 |
-| 25 | 4 | Row 2, Column 4 |
-| 26 | R | Row 3, Column 4 |
-| 27 | F | Row 4, Column 4 |
-| 28 | C | Row 5, Column 4 |
-| 29 | NOT_APPLICABLE | Reserved |
-| 30 | F4 | Row 1, Column 4 |
-| 31 | 5 | Row 2, Column 5 |
-| 32 | T | Row 3, Column 5 |
-| 33 | G | Row 4, Column 5 |
-| 34 | V | Row 5, Column 5 |
-| 35 | NOT_APPLICABLE | Reserved |
-| 36 | F5 | Row 1, Column 5 |
-| 37 | 6 | Row 2, Column 6 |
-| 38 | Y | Row 3, Column 6 |
-| 39 | H | Row 4, Column 6 |
-| 40 | B | Row 5, Column 6 |
-| 41 | Space | Row 6, Column 6 |
-| 42 | F6 | Row 1, Column 6 |
-| 43 | 7 | Row 2, Column 7 |
-| 44 | U | Row 3, Column 7 |
-| 45 | J | Row 4, Column 7 |
-| 46 | N | Row 5, Column 7 |
-| 47 | R-Alt | Row 6, Column 7 |
-| 48 | F7 | Row 1, Column 7 |
-| 49 | 8 | Row 2, Column 8 |
-| 50 | I | Row 3, Column 8 |
-| 51 | K | Row 4, Column 8 |
-| 52 | M | Row 5, Column 8 |
-| 53 | Fn | Row 6, Column 8 |
-| 54 | F8 | Row 1, Column 8 |
-| 55 | 9 | Row 2, Column 9 |
-| 56 | O | Row 3, Column 9 |
-| 57 | L | Row 4, Column 9 |
-| 58 | , | Row 5, Column 9 |
-| 59 | R-Ctrl | Row 6, Column 9 |
-| 60 | F9 | Row 1, Column 9 |
-| 61 | 0 | Row 2, Column 10 |
-| 62 | P | Row 3, Column 10 |
-| 63 | ; | Row 4, Column 10 |
-| 64 | . | Row 5, Column 10 |
-| 65 | Left | Row 6, Column 10 |
-| 66 | F10 | Row 1, Column 10 |
-| 67 | - | Row 2, Column 11 |
-| 68 | [ | Row 3, Column 11 |
-| 69 | ' | Row 4, Column 11 |
-| 70 | / | Row 5, Column 11 |
-| 71 | Down | Row 6, Column 11 |
-| 72 | F11 | Row 1, Column 11 |
-| 73 | = | Row 2, Column 12 |
-| 74 | ] | Row 3, Column 12 |
-| 75 | NOT_APPLICABLE | Reserved |
-| 76 | R-Shift | Row 5, Column 12 |
-| 77 | Right | Row 6, Column 12 |
-| 78 | F12 | Row 1, Column 12 |
-| 79 | Backspace | Row 2, Column 13 |
-| 80 | \ | Row 3, Column 13 |
-| 81 | Enter | Row 4, Column 13 |
-| 82 | Up | Row 5, Column 13 |
-| 83 | Ins | Row 6, Column 13 |
-| 84 | PrtSc | Row 1, Column 13 |
-| 85 | Home | Row 2, Column 14 |
-| 86 | End | Row 3, Column 14 |
-| 87 | PgUp | Row 4, Column 14 |
-| 88 | PgDown | Row 5, Column 14 |
-| 89 | Del | Row 6, Column 14 |
-| 90-147 | NOT_APPLICABLE | Reserved |
+| Position | Key | Keyname | Notes |
+|----------|-----|---------|-------|
+| 0 | ESC | KEY_ESC | Row 1, Column 0 |
+| 1 | Grave (`, ~) | KEY_GRAVE | Row 2, Column 0 |
+| 2 | Tab | KEY_TAB | Row 3, Column 0 |
+| 3 | Caps Lock | KEY_CAPSLOCK | Row 4, Column 0 |
+| 4 | L-Shift | KEY_LEFTSHIFT | Row 5, Column 0 |
+| 5 | L-Ctrl | KEY_LEFTCTRL | Row 6, Column 0 |
+| 6 | NOT_APPLICABLE |  | Reserved |
+| 7 | 1 | KEY_1 | Row 2, Column 1 |
+| 8 | Q | KEY_Q | Row 3, Column 1 |
+| 9 | A | KEY_A | Row 4, Column 1 |
+| 10 | NOT_APPLICABLE |  | Reserved |
+| 11 | NOT_APPLICABLE |  | Reserved |
+| 12 | F1 | KEY_F1 | Row 1, Column 1 |
+| 13 | 2 | KEY_2 | Row 2, Column 2 |
+| 14 | W | KEY_W | Row 3, Column 2 |
+| 15 | S | KEY_S | Row 4, Column 2 |
+| 16 | Z | KEY_Z | Row 5, Column 2 |
+| 17 | L-Meta (Win) | KEY_LEFTMETA | Row 6, Column 2 |
+| 18 | F2 | KEY_F2 | Row 1, Column 2 |
+| 19 | 3 | KEY_3 | Row 2, Column 3 |
+| 20 | E | KEY_E | Row 3, Column 3 |
+| 21 | D | KEY_D | Row 4, Column 3 |
+| 22 | X | KEY_X | Row 5, Column 3 |
+| 23 | L-Alt | KEY_LEFTALT | Row 6, Column 3 |
+| 24 | F3 | KEY_F3 | Row 1, Column 3 |
+| 25 | 4 | KEY_4 | Row 2, Column 4 |
+| 26 | R | KEY_R | Row 3, Column 4 |
+| 27 | F | KEY_F | Row 4, Column 4 |
+| 28 | C | KEY_C | Row 5, Column 4 |
+| 29 | NOT_APPLICABLE |  | Reserved |
+| 30 | F4 | KEY_F4 | Row 1, Column 4 |
+| 31 | 5 | KEY_5 | Row 2, Column 5 |
+| 32 | T | KEY_T | Row 3, Column 5 |
+| 33 | G | KEY_G | Row 4, Column 5 |
+| 34 | V | KEY_V | Row 5, Column 5 |
+| 35 | NOT_APPLICABLE |  | Reserved |
+| 36 | F5 | KEY_F5 | Row 1, Column 5 |
+| 37 | 6 | KEY_6 | Row 2, Column 6 |
+| 38 | Y | KEY_Y | Row 3, Column 6 |
+| 39 | H | KEY_H | Row 4, Column 6 |
+| 40 | B | KEY_B | Row 5, Column 6 |
+| 41 | Space | KEY_SPACE | Row 6, Column 6 |
+| 42 | F6 | KEY_F6 | Row 1, Column 6 |
+| 43 | 7 | KEY_7 | Row 2, Column 7 |
+| 44 | U | KEY_U | Row 3, Column 7 |
+| 45 | J | KEY_J | Row 4, Column 7 |
+| 46 | N | KEY_N | Row 5, Column 7 |
+| 47 | R-Alt | KEY_RIGHTALT | Row 6, Column 7 |
+| 48 | F7 | KEY_F7 | Row 1, Column 7 |
+| 49 | 8 | KEY_8 | Row 2, Column 8 |
+| 50 | I | KEY_I | Row 3, Column 8 |
+| 51 | K | KEY_K | Row 4, Column 8 |
+| 52 | M | KEY_M | Row 5, Column 8 |
+| 53 | Fn | KEY_FN | Row 6, Column 8 |
+| 54 | F8 | KEY_F8 | Row 1, Column 8 |
+| 55 | 9 | KEY_9 | Row 2, Column 9 |
+| 56 | O | KEY_O | Row 3, Column 9 |
+| 57 | L | KEY_L | Row 4, Column 9 |
+| 58 | , | KEY_COMMA | Row 5, Column 9 |
+| 59 | R-Ctrl | KEY_RIGHTCTRL | Row 6, Column 9 |
+| 60 | F9 | KEY_F9 | Row 1, Column 9 |
+| 61 | 0 | KEY_0 | Row 2, Column 10 |
+| 62 | P | KEY_P | Row 3, Column 10 |
+| 63 | ; | KEY_SEMICOLON | Row 4, Column 10 |
+| 64 | . | KEY_DOT | Row 5, Column 10 |
+| 65 | Left | KEY_LEFT | Row 6, Column 10 |
+| 66 | F10 | KEY_F10 | Row 1, Column 10 |
+| 67 | - | KEY_MINUS | Row 2, Column 11 |
+| 68 | [ | KEY_LEFTBRACE | Row 3, Column 11 |
+| 69 | ' | KEY_APOSTROPHE | Row 4, Column 11 |
+| 70 | / | KEY_SLASH | Row 5, Column 11 |
+| 71 | Down | KEY_DOWN | Row 6, Column 11 |
+| 72 | F11 | KEY_F11 | Row 1, Column 11 |
+| 73 | = | KEY_EQUAL | Row 2, Column 12 |
+| 74 | ] | KEY_RIGHTBRACE | Row 3, Column 12 |
+| 75 | NOT_APPLICABLE |  | Reserved |
+| 76 | R-Shift | KEY_RIGHTSHIFT | Row 5, Column 12 |
+| 77 | Right | KEY_RIGHT | Row 6, Column 12 |
+| 78 | F12 | KEY_F12 | Row 1, Column 12 |
+| 79 | Backspace | KEY_BACKSPACE | Row 2, Column 13 |
+| 80 | \ | KEY_BACKSLASH | Row 3, Column 13 |
+| 81 | Enter | KEY_ENTER | Row 4, Column 13 |
+| 82 | Up | KEY_UP | Row 5, Column 13 |
+| 83 | Ins | KEY_INSERT | Row 6, Column 13 |
+| 84 | PrtSc | KEY_PRINTSCREEN | Row 1, Column 13 |
+| 85 | Home | KEY_HOME | Row 2, Column 14 |
+| 86 | End | KEY_END | Row 3, Column 14 |
+| 87 | PgUp | KEY_PAGEUP | Row 4, Column 14 |
+| 88 | PgDown | KEY_PAGE_DOWN | Row 5, Column 14 |
+| 89 | Del | KEY_DELETE | Row 6, Column 14 |
+| 90-147 | NOT_APPLICABLE |  | Reserved |
 
 ![Yenkee YKB3700 Rogue Keyboard](./images/yenkee-ykb3700-rgb-keymap-reference.png)
 *Reference layout of the Yenkee YKB3700 Rogue keyboard showing key indices as used in the device’s HID RGB configuration packets.*
@@ -453,7 +453,7 @@ Each key position uses 4 bytes in the following format:
 | R-Ctrl | `0xe4` | Right Control |
 | R-Shift | `0xe5` | Right Shift |
 | R-Alt | `0xe6` | Right Alt |
-| Fn | `0x0a01` | Function key (special format) |
+| Fn | `0x0a010000` | Function key (special format) |
 
 ### Important Rules
 
@@ -466,110 +466,135 @@ Each key position uses 4 bytes in the following format:
 ### Default Key Mapping
 
 #### Packet 0 - Positions 0-13
-| Pos | Physical Key | Default Mapping | Mod2 | Mod1 | Scan Code |
-|-----|--------------|-----------------|------|------|-----------|
-| 0 | ESC | ESC | `0x00` | `0x00` | `0x29` |
-| 1 | Grave | Grave | `0x00` | `0x00` | `0x35` |
-| 2 | TAB | TAB | `0x00` | `0x00` | `0x2b` |
-| 3 | CAPS | CAPS | `0x00` | `0x00` | `0x39` |
-| 4 | L-SHIFT | L-SHIFT | `0x00` | `0x00` | `0xe1` |
-| 5 | L-CTRL | L-CTRL | `0x00` | `0x00` | `0xe0` |
-| 6 | - | DISABLED | `0x00` | `0x00` | `0x00` |
-| 7 | 1 | 1 | `0x00` | `0x00` | `0x1e` |
-| 8 | Q | Q | `0x00` | `0x00` | `0x14` |
-| 9 | A | A | `0x00` | `0x00` | `0x04` |
-| 10 | \\ | \\ | `0x00` | `0x00` | `0x64` |
-| 11 | - | DISABLED | `0x00` | `0x00` | `0x00` |
-| 12 | F1 | F1 | `0x00` | `0x00` | `0x3a` |
-| 13 | 2 | 2 | `0x00` | `0x00` | `0x1f` |
+
+| Pos | Physical Key | Default Mapping | Mod2 | Mod1 | Scan Code | Reserved byte |
+|-----|--------------|-----------------|------|------|-----------|---------------|
+| 0 | ESC | KEY_ESC | 0x00 | 0x00 | 0x29 | 0x00 |
+| 1 | Grave | KEY_GRAVE | 0x00 | 0x00 | 0x35 | 0x00 |
+| 2 | TAB | KEY_TAB | 0x00 | 0x00 | 0x2b | 0x00 |
+| 3 | CAPS | KEY_CAPSLOCK | 0x00 | 0x00 | 0x39 | 0x00 |
+| 4 | L-SHIFT | KEY_LEFTSHIFT | 0x00 | 0x00 | 0xe1 | 0x00 |
+| 5 | L-CTRL | KEY_LEFTCTRL | 0x00 | 0x00 | 0xe0 | 0x00 |
+| 6 |  | DISABLED | 0x00 | 0x00 | 0x00 | 0x00 |
+| 7 | 1 | KEY_1 | 0x00 | 0x00 | 0x1e | 0x00 |
+| 8 | Q | KEY_Q | 0x00 | 0x00 | 0x14 | 0x00 |
+| 9 | A | KEY_A | 0x00 | 0x00 | 0x04 | 0x00 |
+| 10 |  | KEY_102ND | 0x00 | 0x00 | 0x64 | 0x00 |
+| 11 |  | DISABLED | 0x00 | 0x00 | 0x00 | 0x00 |
+| 12 | F1 | KEY_F1 | 0x00 | 0x00 | 0x3a | 0x00 |
+| 13 | 2 | KEY_2 | 0x00 | 0x00 | 0x1f | 0x00 |
 
 #### Packet 1 - Positions 14-27
-| Pos | Physical Key | Default Mapping |
-|-----|--------------|-----------------|
-| 14 | W | W (`0x1a`) |
-| 15 | S | S (`0x16`) |
-| 16 | Z | Z (`0x1d`) |
-| 17 | L-META | L-META (`0xe3`) |
-| 18 | F2 | F2 (`0x3b`) |
-| 19 | 3 | 3 (`0x20`) |
-| 20 | E | E (`0x08`) |
-| 21 | D | D (`0x07`) |
-| 22 | X | X (`0x1b`) |
-| 23 | L-ALT | L-ALT (`0xe2`) |
-| 24 | F3 | F3 (`0x3c`) |
-| 25 | 4 | 4 (`0x21`) |
-| 26 | R | R (`0x15`) |
-| 27 | F | F (`0x09`) |
+
+| Pos | Physical Key | Default Mapping | Mod2 | Mod1 | Scan Code | Reserved byte |
+|-----|--------------|-----------------|------|------|-----------|---------------|
+| 14 | W | KEY_W | 0x00 | 0x00 | 0x1a | 0x00 |
+| 15 | S | KEY_S | 0x00 | 0x00 | 0x16 | 0x00 |
+| 16 | Z | KEY_Z | 0x00 | 0x00 | 0x1d | 0x00 |
+| 17 | L-META | KEY_LEFTMETA | 0x00 | 0x00 | 0xe3 | 0x00 |
+| 18 | F2 | KEY_F2 | 0x00 | 0x00 | 0x3b | 0x00 |
+| 19 | 3 | KEY_3 | 0x00 | 0x00 | 0x20 | 0x00 |
+| 20 | E | KEY_E | 0x00 | 0x00 | 0x08 | 0x00 |
+| 21 | D | KEY_D | 0x00 | 0x00 | 0x07 | 0x00 |
+| 22 | X | KEY_X | 0x00 | 0x00 | 0x1b | 0x00 |
+| 23 | L-ALT | KEY_LEFTALT | 0x00 | 0x00 | 0xe2 | 0x00 |
+| 24 | F3 | KEY_F3 | 0x00 | 0x00 | 0x3c | 0x00 |
+| 25 | 4 | KEY_4 | 0x00 | 0x00 | 0x21 | 0x00 |
+| 26 | R | KEY_R | 0x00 | 0x00 | 0x15 | 0x00 |
+| 27 | F | KEY_F | 0x00 | 0x00 | 0x09 | 0x00 |
 
 #### Packet 2 - Positions 28-41
-| Pos | Physical Key | Default Mapping |
-|-----|--------------|-----------------|
-| 28 | C | C (`0x06`) |
-| 29 | - | DISABLED |
-| 30 | F4 | F4 (`0x3d`) |
-| 31 | 5 | 5 (`0x22`) |
-| 32 | T | T (`0x17`) |
-| 33 | G | G (`0x0a`) |
-| 34 | V | V (`0x19`) |
-| 35 | - | DISABLED |
-| 36 | F5 | F5 (`0x3e`) |
-| 37 | 6 | 6 (`0x23`) |
-| 38 | Y | Y (`0x1c`) |
-| 39 | H | H (`0x0b`) |
-| 40 | B | B (`0x05`) |
-| 41 | SPACE | SPACE (`0x2c`) |
+| Pos | Physical Key | Default Mapping | Mod2 | Mod1 | Scan Code | Reserved byte |
+|-----|--------------|-----------------|------|------|-----------|---------------|
+| 28 | C | KEY_C | 0x00 | 0x00 | 0x06 | 0x00 |
+| 29 |  | DISABLED | 0x00 | 0x00 | 0x00 | 0x00 |
+| 30 | F4 | KEY_F4 | 0x00 | 0x00 | 0x3d | 0x00 |
+| 31 | 5 | KEY_5 | 0x00 | 0x00 | 0x22 | 0x00 |
+| 32 | T | KEY_T | 0x00 | 0x00 | 0x17 | 0x00 |
+| 33 | G | KEY_G | 0x00 | 0x00 | 0x0a | 0x00 |
+| 34 | V | KEY_V | 0x00 | 0x00 | 0x19 | 0x00 |
+| 35 |  | DISABLED | 0x00 | 0x00 | 0x00 | 0x00 |
+| 36 | F5 | KEY_F5 | 0x00 | 0x00 | 0x3e | 0x00 |
+| 37 | 6 | KEY_6 | 0x00 | 0x00 | 0x23 | 0x00 |
+| 38 | Y | KEY_Y | 0x00 | 0x00 | 0x1c | 0x00 |
+| 39 | H | KEY_H | 0x00 | 0x00 | 0x0b | 0x00 |
+| 40 | B | KEY_B | 0x00 | 0x00 | 0x05 | 0x00 |
+| 41 | SPACE | KEY_SPACE | 0x00 | 0x00 | 0x2c | 0x00 |
 
-##### Packet 4 - Positions 56-69
-| Pos | Physical Key | Default Mapping |
-|-----|--------------|-----------------|
-| 56 | O | O (`0x12`) |
-| 57 | L | L (`0x0f`) |
-| 58 | , | , (`0x36`) |
-| 59 | R-CTRL | R-CTRL (`0xe4`) |
-| 60 | F9 | F9 (`0x42`) |
-| 61 | 0 | 0 (`0x27`) |
-| 62 | P | P (`0x13`) |
-| 63 | ; | ; (`0x33`) |
-| 64 | . | . (`0x37`) |
-| 65 | LEFT | LEFT (`0x50`) |
-| 66 | F10 | F10 (`0x43`) |
-| 67 | - | - (`0x2d`) |
-| 68 | [ | [ (`0x2f`) |
-| 69 | ' | ' (`0x34`) |
+#### Packet 3 - Positions 42-55
+
+| Pos | Physical Key | Default Mapping | Mod2 | Mod1 | Scan Code | Reserved byte |
+|-----|--------------|-----------------|------|------|-----------|---------------|
+| 42 | F6 | KEY_F6 | 0x00 | 0x00 | 0x3f | 0x00 |
+| 43 | 7 | KEY_7 | 0x00 | 0x00 | 0x24 | 0x00 |
+| 44 | U | KEY_U | 0x00 | 0x00 | 0x18 | 0x00 |
+| 45 | J | KEY_J | 0x00 | 0x00 | 0x0d | 0x00 |
+| 46 | N | KEY_N | 0x00 | 0x00 | 0x11 | 0x00 |
+| 47 | Right | KEY_RIGHTALT | 0x00 | 0x00 | 0x4f | 0x00 |
+| 48 | F7 | KEY_F7 | 0x00 | 0x00 | 0x40 | 0x00 |
+| 49 | 8 | KEY_8 | 0x00 | 0x00 | 0x25 | 0x00 |
+| 50 | I | KEY_I | 0x00 | 0x00 | 0x0c | 0x00 |
+| 51 | K | KEY_K | 0x00 | 0x00 | 0x0e | 0x00 |
+| 52 | M | KEY_M | 0x00 | 0x00 | 0x10 | 0x00 |
+| 53 | Fn | KEY_FN | 0x0a | 0x01 | 0x00 | 0x00 |
+| 54 | F8 | KEY_F8 | 0x00 | 0x00 | 0x41 | 0x00 |
+| 55 | 9 | KEY_9 | 0x00 | 0x00 | 0x26 | 0x00 |
+
+#### Packet 4 - Positions 56-69
+
+| Pos | Physical Key | Default Mapping | Mod2 | Mod1 | Scan Code | Reserved byte |
+|-----|--------------|-----------------|------|------|-----------|---------------|
+| 56 | O | KEY_O | 0x00 | 0x00 | 0x12 | 0x00 |
+| 57 | L | KEY_L | 0x00 | 0x00 | 0x0f | 0x00 |
+| 58 | , | KEY_COMMA | 0x00 | 0x00 | 0x36 | 0x00 |
+| 59 | R-CTRL | KEY_RIGHTCTRL | 0x00 | 0x00 | 0xe4 | 0x00 |
+| 60 | F9 | KEY_F9 | 0x00 | 0x00 | 0x42 | 0x00 |
+| 61 | 0 | KEY_0 | 0x00 | 0x00 | 0x27 | 0x00 |
+| 62 | P | KEY_P | 0x00 | 0x00 | 0x13 | 0x00 |
+| 63 | ; | KEY_SEMICOLON | 0x00 | 0x00 | 0x33 | 0x00 |
+| 64 | . | KEY_DOT | 0x00 | 0x00 | 0x37 | 0x00 |
+| 65 | LEFT | KEY_LEFT | 0x00 | 0x00 | 0x50 | 0x00 |
+| 66 | F10 | KEY_F10 | 0x00 | 0x00 | 0x43 | 0x00 |
+| 67 | - | KEY_MINUS | 0x00 | 0x00 | 0x2d | 0x00 |
+| 68 | [ | KEY_LEFTBRACE | 0x00 | 0x00 | 0x2f | 0x00 |
+| 69 | ' | KEY_APOSTROPHE | 0x00 | 0x00 | 0x34 | 0x00 |
 
 #### Packet 5 - Positions 70-83
-| Pos | Physical Key | Default Mapping |
-|-----|--------------|-----------------|
-| 70 | / | / (`0x38`) |
-| 71 | DOWN | DOWN (`0x51`) |
-| 72 | F11 | F11 (`0x44`) |
-| 73 | = | = (`0x2e`) |
-| 74 | ] | ] (`0x30`) |
-| 75 | #/~ | #/~ (`0x32`) |
-| 76 | R-SHIFT | R-SHIFT (`0xe5`) |
-| 77 | RIGHT | RIGHT (`0x4f`) |
-| 78 | F12 | F12 (`0x45`) |
-| 79 | BCKSPACE | BCKSPACE (`0x2a`) |
-| 80 | \\ | \\ (`0x31`) |
-| 81 | ENTER | ENTER (`0x28`) |
-| 82 | UP | UP (`0x52`) |
-| 83 | INS | INS (`0x49`) |
+
+| Pos | Physical Key | Default Mapping | Mod2 | Mod1 | Scan Code | Reserved byte |
+|-----|--------------|-----------------|------|------|-----------|---------------|
+| 70 | / | KEY_SLASH | 0x00 | 0x00 | 0x38 | 0x00 |
+| 71 | DOWN | KEY_DOWN | 0x00 | 0x00 | 0x51 | 0x00 |
+| 72 | F11 | KEY_F11 | 0x00 | 0x00 | 0x44 | 0x00 |
+| 73 | = | KEY_EQUAL | 0x00 | 0x00 | 0x2e | 0x00 |
+| 74 | ] | KEY_RIGHTBRACE | 0x00 | 0x00 | 0x30 | 0x00 |
+| 75 | #/~ | KEY_HASHTILDE | 0x00 | 0x00 | 0x32 | 0x00 |
+| 76 | R-SHIFT | KEY_RIGHTSHIFT | 0x00 | 0x00 | 0xe5 | 0x00 |
+| 77 | RIGHT | KEY_RIGHT | 0x00 | 0x00 | 0x4f | 0x00 |
+| 78 | F12 | KEY_F12 | 0x00 | 0x00 | 0x45 | 0x00 |
+| 79 | BCKSPACE | KEY_BACKSPACE | 0x00 | 0x00 | 0x2a | 0x00 |
+| 80 | \ | KEY_BACKSLASH | 0x00 | 0x00 | 0x31 | 0x00 |
+| 81 | ENTER | KEY_ENTER | 0x00 | 0x00 | 0x28 | 0x00 |
+| 82 | UP | KEY_UP | 0x00 | 0x00 | 0x52 | 0x00 |
+| 83 | INS | KEY_INSERT | 0x00 | 0x00 | 0x49 | 0x00 |
 
 #### Packet 6 - Positions 84-97
-| Pos | Physical Key | Default Mapping |
-|-----|--------------|-----------------|
-| 84 | PRTSC | PRTSC (`0x46`) |
-| 85 | HOME | HOME (`0x4a`) |
-| 86 | END | END (`0x4d`) |
-| 87 | PGUP | PGUP (`0x4b`) |
-| 88 | PGDOWN | PGDOWN (`0x4e`) |
-| 89 | DEL | DEL (`0x4c`) |
-| 90-97 | - | DISABLED |
+
+| Pos | Physical Key | Default Mapping | Mod2 | Mod1 | Scan Code | Reserved byte |
+|-----|--------------|-----------------|------|------|-----------|---------------|
+| 84 | PRTSC | KEY_PRINTSCREEN | 0x00 | 0x00 | 0x46 | 0x00 |
+| 85 | HOME | KEY_HOME | 0x00 | 0x00 | 0x4a | 0x00 |
+| 86 | END | KEY_END | 0x00 | 0x00 | 0x4d | 0x00 |
+| 87 | PGUP | KEY_PAGEUP | 0x00 | 0x00 | 0x4b | 0x00 |
+| 88 | PGDOWN | KEY_PAGE_DOWN | 0x00 | 0x00 | 0x4e | 0x00 |
+| 89 | DEL | KEY_DELETE | 0x00 | 0x00 | 0x4c | 0x00 |
+| 90-97 |  | DISABLED | 0x00 | 0x00 | 0x00 | 0x00 |
 
 #### Packets 7-8 - Positions 98-125
-| Pos | Physical Key | Default Mapping |
-|-----|--------------|-----------------|
-| 98-125 | - | DISABLED |
+
+| Pos | Physical Key | Default Mapping | Mod2 | Mod1 | Scan Code | Reserved byte |
+|-----|--------------|-----------------|------|------|-----------|---------------|
+| 98-125 |  | DISABLED | `0x00` | `0x00` | `0x00` | `0x00` |
 
 ### Special Function Events
 
