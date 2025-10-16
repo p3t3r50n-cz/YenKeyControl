@@ -86,33 +86,33 @@ This document describes the USB HID protocol for controlling RGB lighting effect
 
 ### Mode Reference Table
 
-| ID | Hex | Mode Name | Description | Submodes Available |
-|----|-----|-----------|-------------|-------------------|
-| 1 | `0x00` | Backlight OFF | Turns off all lighting | No |
-| 2 | `0x01` | Static color | Solid color across all keys | No |
-| 3 | `0x02` | Breathing | Pulsing fade in/out effect | No |
-| 4 | `0x03` | Neon | Neon-like glow effect | No |
-| 5 | `0x04` | Wave | Moving wave pattern | Yes (direction) |
-| 6 | `0x05` | Waterdrop | Ripple effect on keypress | No |
-| 7 | `0x06` | Rain | Falling raindrop effect | No |
-| 8 | `0x07` | Snake | Snake-like moving pattern | Yes (linear/center) |
-| 9 | `0x08` | Fade-out | Keys fade after press | No |
-| 10 | `0x09` | Spiral | From center to sides | No |
-| 11 | `0x0a` | Sinusoid | Sine wave pattern | No |
-| 12 | `0x0b` | Kaleidoscope | Symmetrical pattern | Yes (from/to center) |
-| 13 | `0x0c` | Linear wave | Linear wave motion | No |
-| 14 | `0x0d` | User mod | WSAD + Arrows highlighted | No |
-| 15 | `0x0e` | Laser | Laser beam on keypress | No |
-| 16 | `0x0f` | Round wave | Circular wave pattern | Yes (direction) |
-| 17 | `0x10` | Shining | Bright shining effect | No |
-| 18 | `0x11` | Rain | Alternative rain effect | No |
-| 19 | `0x12` | Horizontal wave | Random row wave | No |
-| 20 | `0x13` | Static fade-in | Fade in on keypress | No |
-| 21 | `0x14` | EDM sound reaction | Music visualization (EDM) | Yes |
-| 22 | `0x15` | Unknown | "Screen1" mode in original SW | No |
-| 23 | `0x16` | Standard sound reaction | Music visualization (Standard) | No |
-| 24 | `0x17` | Surf/breakers | Horizontal wave breakers | No |
-| 25 | `0x18` | Skew stripes | Diagonal stripe pattern | No |
+| ID | Hex | Mode Name | Description | Submode 0<br>(flag: `0x`) | Submode 1<br>(flag: `1x`) | Submode 2<br>(flag: `2x`) | Submode 3<br>(flag: `3x`) |
+|----|-----|-----------|-------------|-----------|-----------|-----------|-----------|
+| 1 | `0x00` | Backlight OFF | Turns off all lighting | | | | |
+| 2 | `0x01` | Static color | Solid color across all keys | | | | |
+| 3 | `0x02` | Breathing | Pulsing fade in/out effect | | | | | |
+| 4 | `0x03` | Neon | Neon-like glow effect | | | | | |
+| 5 | `0x04` | Wave | Moving wave pattern | right | left | down | up |
+| 6 | `0x05` | Waterdrop | Ripple effect on keypress |  | | | |
+| 7 | `0x06` | Rain | Falling raindrop effect |  | | | |
+| 8 | `0x07` | Snake | Snake-like moving pattern | linear | to center | | |
+| 9 | `0x08` | Fade-out | Keys fade after press |  | | | |
+| 10 | `0x09` | Spiral | From center to sides |  | | | |
+| 11 | `0x0a` | Sinusoid | Sine wave pattern |  | | | |
+| 12 | `0x0b` | Kaleidoscope | Symmetrical pattern | from center | to center | | |
+| 13 | `0x0c` | Linear wave | Linear wave motion |  | | | |
+| 14 | `0x0d` | User mod | WSAD + Arrows highlighted |  | | | |
+| 15 | `0x0e` | Laser | Laser beam on keypress |  | | | |
+| 16 | `0x0f` | Round wave | Circular wave pattern | counterclockwise | clockwise | | |
+| 17 | `0x10` | Shining | Bright shining effect |  | | | |
+| 18 | `0x11` | Rain | Alternative rain effect |  | | | |
+| 19 | `0x12` | Horizontal wave | Random row wave |  | | | |
+| 20 | `0x13` | Static fade-in | Fade in on keypress |  | | | |
+| 21 | `0x14` | EDM sound reaction | Music visualization (EDM) | upright | separate | crossing | |
+| 22 | `0x15` | Unknown | "Screen1" mode in original SW |  | | | |
+| 23 | `0x16` | Standard sound reaction | Music visualization (Standard) |  | | | |
+| 24 | `0x17` | Surf/breakers | Horizontal wave breakers |  | | | |
+| 25 | `0x18` | Skew stripes | Diagonal stripe pattern |  | | | |
 
 ### Speed Values
 
