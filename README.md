@@ -669,6 +669,7 @@ Remap a key to special function in key mapping packets:
 0900f801000000fd [0300e900] 0000350000002b00...
 # Remap ESC to Browser
 0900f801000000fd [03002302] 0000350000002b00...
+```
 
 ![Yenkee YKB3700 Rogue Keyboard](./images/yenkee-ykb3700-scancodes-keymap-reference.png)
 *Reference map showing physical key positions as used in the USB HID packets for key remapping on the Yenkee YKB3700 Rogue.*
