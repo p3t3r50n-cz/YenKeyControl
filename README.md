@@ -229,99 +229,99 @@ The Yenkee 3700 Rogue keyboard uses a proprietary USB HID protocol for RGB light
 
 #### Complete Position List (0-147)
 
-| Position | Key | Keyname | Notes |
-|----------|-----|---------|-------|
-| 0 | ESC | KEY_ESC | Row 1, Column 0 |
-| 1 | Grave (`, ~) | KEY_GRAVE | Row 2, Column 0 |
-| 2 | Tab | KEY_TAB | Row 3, Column 0 |
-| 3 | Caps Lock | KEY_CAPSLOCK | Row 4, Column 0 |
-| 4 | L-Shift | KEY_LEFTSHIFT | Row 5, Column 0 |
-| 5 | L-Ctrl | KEY_LEFTCTRL | Row 6, Column 0 |
-| 6 | NOT_APPLICABLE |  | Reserved |
-| 7 | 1 | KEY_1 | Row 2, Column 1 |
-| 8 | Q | KEY_Q | Row 3, Column 1 |
-| 9 | A | KEY_A | Row 4, Column 1 |
-| 10 | NOT_APPLICABLE |  | Reserved |
-| 11 | NOT_APPLICABLE |  | Reserved |
-| 12 | F1 | KEY_F1 | Row 1, Column 1 |
-| 13 | 2 | KEY_2 | Row 2, Column 2 |
-| 14 | W | KEY_W | Row 3, Column 2 |
-| 15 | S | KEY_S | Row 4, Column 2 |
-| 16 | Z | KEY_Z | Row 5, Column 2 |
-| 17 | L-Meta (Win) | KEY_LEFTMETA | Row 6, Column 2 |
-| 18 | F2 | KEY_F2 | Row 1, Column 2 |
-| 19 | 3 | KEY_3 | Row 2, Column 3 |
-| 20 | E | KEY_E | Row 3, Column 3 |
-| 21 | D | KEY_D | Row 4, Column 3 |
-| 22 | X | KEY_X | Row 5, Column 3 |
-| 23 | L-Alt | KEY_LEFTALT | Row 6, Column 3 |
-| 24 | F3 | KEY_F3 | Row 1, Column 3 |
-| 25 | 4 | KEY_4 | Row 2, Column 4 |
-| 26 | R | KEY_R | Row 3, Column 4 |
-| 27 | F | KEY_F | Row 4, Column 4 |
-| 28 | C | KEY_C | Row 5, Column 4 |
-| 29 | NOT_APPLICABLE |  | Reserved |
-| 30 | F4 | KEY_F4 | Row 1, Column 4 |
-| 31 | 5 | KEY_5 | Row 2, Column 5 |
-| 32 | T | KEY_T | Row 3, Column 5 |
-| 33 | G | KEY_G | Row 4, Column 5 |
-| 34 | V | KEY_V | Row 5, Column 5 |
-| 35 | NOT_APPLICABLE |  | Reserved |
-| 36 | F5 | KEY_F5 | Row 1, Column 5 |
-| 37 | 6 | KEY_6 | Row 2, Column 6 |
-| 38 | Y | KEY_Y | Row 3, Column 6 |
-| 39 | H | KEY_H | Row 4, Column 6 |
-| 40 | B | KEY_B | Row 5, Column 6 |
-| 41 | Space | KEY_SPACE | Row 6, Column 6 |
-| 42 | F6 | KEY_F6 | Row 1, Column 6 |
-| 43 | 7 | KEY_7 | Row 2, Column 7 |
-| 44 | U | KEY_U | Row 3, Column 7 |
-| 45 | J | KEY_J | Row 4, Column 7 |
-| 46 | N | KEY_N | Row 5, Column 7 |
-| 47 | R-Alt | KEY_RIGHTALT | Row 6, Column 7 |
-| 48 | F7 | KEY_F7 | Row 1, Column 7 |
-| 49 | 8 | KEY_8 | Row 2, Column 8 |
-| 50 | I | KEY_I | Row 3, Column 8 |
-| 51 | K | KEY_K | Row 4, Column 8 |
-| 52 | M | KEY_M | Row 5, Column 8 |
-| 53 | Fn | KEY_FN | Row 6, Column 8 |
-| 54 | F8 | KEY_F8 | Row 1, Column 8 |
-| 55 | 9 | KEY_9 | Row 2, Column 9 |
-| 56 | O | KEY_O | Row 3, Column 9 |
-| 57 | L | KEY_L | Row 4, Column 9 |
-| 58 | , | KEY_COMMA | Row 5, Column 9 |
-| 59 | R-Ctrl | KEY_RIGHTCTRL | Row 6, Column 9 |
-| 60 | F9 | KEY_F9 | Row 1, Column 9 |
-| 61 | 0 | KEY_0 | Row 2, Column 10 |
-| 62 | P | KEY_P | Row 3, Column 10 |
-| 63 | ; | KEY_SEMICOLON | Row 4, Column 10 |
-| 64 | . | KEY_DOT | Row 5, Column 10 |
-| 65 | Left | KEY_LEFT | Row 6, Column 10 |
-| 66 | F10 | KEY_F10 | Row 1, Column 10 |
-| 67 | - | KEY_MINUS | Row 2, Column 11 |
-| 68 | [ | KEY_LEFTBRACE | Row 3, Column 11 |
-| 69 | ' | KEY_APOSTROPHE | Row 4, Column 11 |
-| 70 | / | KEY_SLASH | Row 5, Column 11 |
-| 71 | Down | KEY_DOWN | Row 6, Column 11 |
-| 72 | F11 | KEY_F11 | Row 1, Column 11 |
-| 73 | = | KEY_EQUAL | Row 2, Column 12 |
-| 74 | ] | KEY_RIGHTBRACE | Row 3, Column 12 |
-| 75 | NOT_APPLICABLE |  | Reserved |
-| 76 | R-Shift | KEY_RIGHTSHIFT | Row 5, Column 12 |
-| 77 | Right | KEY_RIGHT | Row 6, Column 12 |
-| 78 | F12 | KEY_F12 | Row 1, Column 12 |
-| 79 | Backspace | KEY_BACKSPACE | Row 2, Column 13 |
-| 80 | \ | KEY_BACKSLASH | Row 3, Column 13 |
-| 81 | Enter | KEY_ENTER | Row 4, Column 13 |
-| 82 | Up | KEY_UP | Row 5, Column 13 |
-| 83 | Ins | KEY_INSERT | Row 6, Column 13 |
-| 84 | PrtSc | KEY_PRINTSCREEN | Row 1, Column 13 |
-| 85 | Home | KEY_HOME | Row 2, Column 14 |
-| 86 | End | KEY_END | Row 3, Column 14 |
-| 87 | PgUp | KEY_PAGEUP | Row 4, Column 14 |
-| 88 | PgDown | KEY_PAGE_DOWN | Row 5, Column 14 |
-| 89 | Del | KEY_DELETE | Row 6, Column 14 |
-| 90-147 | NOT_APPLICABLE |  | Reserved |
+| Packet | Position | Key | Keyname | Notes |
+|--------|----------|-----|---------|-------|
+| 0 | 0 | ESC | KEY_ESC | Row 1, Column 0 |
+| 0 | 1 | Grave (`, ~) | KEY_GRAVE | Row 2, Column 0 |
+| 0 | 2 | Tab | KEY_TAB | Row 3, Column 0 |
+| 0 | 3 | Caps Lock | KEY_CAPSLOCK | Row 4, Column 0 |
+| 0 | 4 | L-Shift | KEY_LEFTSHIFT | Row 5, Column 0 |
+| 0 | 5 | L-Ctrl | KEY_LEFTCTRL | Row 6, Column 0 |
+| 0 | 6 | NOT_APPLICABLE |  | Reserved |
+| 0 | 7 | 1 | KEY_1 | Row 2, Column 1 |
+| 0 | 8 | Q | KEY_Q | Row 3, Column 1 |
+| 0 | 9 | A | KEY_A | Row 4, Column 1 |
+| 0 | 10 | NOT_APPLICABLE |  | Reserved |
+| 0 | 11 | NOT_APPLICABLE |  | Reserved |
+| 0 | 12 | F1 | KEY_F1 | Row 1, Column 1 |
+| 0 | 13 | 2 | KEY_2 | Row 2, Column 2 |
+| 0 | 14 | W | KEY_W | Row 3, Column 2 |
+| 0 | 15 | S | KEY_S | Row 4, Column 2 |
+| 0 | 16 | Z | KEY_Z | Row 5, Column 2 |
+| 0 | 17 | L-Meta (Win) | KEY_LEFTMETA | Row 6, Column 2 |
+| 0 | 18 | F2 | KEY_F2 | Row 1, Column 2 |
+| 0-1 | 19 | 3 | KEY_3 | Row 2, Column 3 |
+| 1 | 20 | E | KEY_E | Row 3, Column 3 |
+| 1 | 21 | D | KEY_D | Row 4, Column 3 |
+| 1 | 22 | X | KEY_X | Row 5, Column 3 |
+| 1 | 23 | L-Alt | KEY_LEFTALT | Row 6, Column 3 |
+| 1 | 24 | F3 | KEY_F3 | Row 1, Column 3 |
+| 1 | 25 | 4 | KEY_4 | Row 2, Column 4 |
+| 1 | 26 | R | KEY_R | Row 3, Column 4 |
+| 1 | 27 | F | KEY_F | Row 4, Column 4 |
+| 1 | 28 | C | KEY_C | Row 5, Column 4 |
+| 1 | 29 | NOT_APPLICABLE |  | Reserved |
+| 1 | 30 | F4 | KEY_F4 | Row 1, Column 4 |
+| 1 | 31 | 5 | KEY_5 | Row 2, Column 5 |
+| 1 | 32 | T | KEY_T | Row 3, Column 5 |
+| 1 | 33 | G | KEY_G | Row 4, Column 5 |
+| 1 | 34 | V | KEY_V | Row 5, Column 5 |
+| 1 | 35 | NOT_APPLICABLE |  | Reserved |
+| 1 | 36 | F5 | KEY_F5 | Row 1, Column 5 |
+| 1 | 37 | 6 | KEY_6 | Row 2, Column 6 |
+| 1-2 | 38 | Y | KEY_Y | Row 3, Column 6 |
+| 2 | 39 | H | KEY_H | Row 4, Column 6 |
+| 2 | 40 | B | KEY_B | Row 5, Column 6 |
+| 2 | 41 | Space | KEY_SPACE | Row 6, Column 6 |
+| 2 | 42 | F6 | KEY_F6 | Row 1, Column 6 |
+| 2 | 43 | 7 | KEY_7 | Row 2, Column 7 |
+| 2 | 44 | U | KEY_U | Row 3, Column 7 |
+| 2 | 45 | J | KEY_J | Row 4, Column 7 |
+| 2 | 46 | N | KEY_N | Row 5, Column 7 |
+| 2 | 47 | R-Alt | KEY_RIGHTALT | Row 6, Column 7 |
+| 2 | 48 | F7 | KEY_F7 | Row 1, Column 7 |
+| 2 | 49 | 8 | KEY_8 | Row 2, Column 8 |
+| 2 | 50 | I | KEY_I | Row 3, Column 8 |
+| 2 | 51 | K | KEY_K | Row 4, Column 8 |
+| 2 | 52 | M | KEY_M | Row 5, Column 8 |
+| 2 | 53 | Fn | KEY_FN | Row 6, Column 8 |
+| 2 | 54 | F8 | KEY_F8 | Row 1, Column 8 |
+| 2 | 55 | 9 | KEY_9 | Row 2, Column 9 |
+| 2 | 56 | O | KEY_O | Row 3, Column 9 |
+| 3 | 3 | 57 | L | KEY_L | Row 4, Column 9 |
+| 3 | 58 | , | KEY_COMMA | Row 5, Column 9 |
+| 3 | 59 | R-Ctrl | KEY_RIGHTCTRL | Row 6, Column 9 |
+| 3 | 60 | F9 | KEY_F9 | Row 1, Column 9 |
+| 3 | 61 | 0 | KEY_0 | Row 2, Column 10 |
+| 3 | 62 | P | KEY_P | Row 3, Column 10 |
+| 3 | 63 | ; | KEY_SEMICOLON | Row 4, Column 10 |
+| 3 | 64 | . | KEY_DOT | Row 5, Column 10 |
+| 3 | 65 | Left | KEY_LEFT | Row 6, Column 10 |
+| 3 | 66 | F10 | KEY_F10 | Row 1, Column 10 |
+| 3 | 67 | - | KEY_MINUS | Row 2, Column 11 |
+| 3 | 68 | [ | KEY_LEFTBRACE | Row 3, Column 11 |
+| 3 | 69 | ' | KEY_APOSTROPHE | Row 4, Column 11 |
+| 3 | 70 | / | KEY_SLASH | Row 5, Column 11 |
+| 3 | 71 | Down | KEY_DOWN | Row 6, Column 11 |
+| 3 | 72 | F11 | KEY_F11 | Row 1, Column 11 |
+| 3 | 73 | = | KEY_EQUAL | Row 2, Column 12 |
+| 3 | 74 | ] | KEY_RIGHTBRACE | Row 3, Column 12 |
+| 3-4 | 75 | NOT_APPLICABLE |  | Reserved |
+| 4 | 76 | R-Shift | KEY_RIGHTSHIFT | Row 5, Column 12 |
+| 4 | 77 | Right | KEY_RIGHT | Row 6, Column 12 |
+| 4 | 78 | F12 | KEY_F12 | Row 1, Column 12 |
+| 4 | 79 | Backspace | KEY_BACKSPACE | Row 2, Column 13 |
+| 4 | 80 | \ | KEY_BACKSLASH | Row 3, Column 13 |
+| 4 | 81 | Enter | KEY_ENTER | Row 4, Column 13 |
+| 4 | 82 | Up | KEY_UP | Row 5, Column 13 |
+| 4 | 83 | Ins | KEY_INSERT | Row 6, Column 13 |
+| 4 | 84 | PrtSc | KEY_PRINTSCREEN | Row 1, Column 13 |
+| 4 | 85 | Home | KEY_HOME | Row 2, Column 14 |
+| 4 | 86 | End | KEY_END | Row 3, Column 14 |
+| 4 | 87 | PgUp | KEY_PAGEUP | Row 4, Column 14 |
+| 4 | 88 | PgDown | KEY_PAGE_DOWN | Row 5, Column 14 |
+| 4 | 89 | Del | KEY_DELETE | Row 6, Column 14 |
+| 4-7 | 90-147 | NOT_APPLICABLE |  | Reserved |
 
 ![Yenkee YKB3700 Rogue Keyboard](./images/yenkee-ykb3700-rgb-keymap-reference.png)
 *Reference layout of the Yenkee YKB3700 Rogue keyboard showing key indices as used in the device’s HID RGB configuration packets.*
