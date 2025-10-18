@@ -1,4 +1,4 @@
-# Yenkee 3700 Rogue Keyboard Controller
+# Yenkee 3700 Rogue Keyboard - Prototyping Controller Utility
 
 ## Overview
 
