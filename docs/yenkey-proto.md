@@ -1,5 +1,7 @@
 # Yenkee 3700 Rogue Keyboard - Prototyping Controller Utility
 
+**See source code:** [yeneky-proto.py](/src/yenkey-proto.py)
+
 ## Overview
 
 A Python utility for controlling RGB lighting effects and key remapping on the Yenkee 3700 Rogue mechanical keyboard. This tool enables cross-platform control without relying on the vendor's Windows-only software.
