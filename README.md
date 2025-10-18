@@ -427,20 +427,15 @@ Each key position uses 4 bytes in the following format:
 
 **Common Keys (scancodes):**
 ```
-[MOD2] [MOD1] [SCANCODE] [00]
+[00] [00] [00] [SCANCODE] [00]   # Standard scancode without modifiers
+[00] [MOD1] [SCANCODE] [00]      # Standard scanocode with one modifier
+[00] [MOD2] [MOD1] [SCANCODE]    # Standard scancode with two modifiers
 ```
 
-**Multimedia Keys:**
+**Special Function Keys:**
 ```
-[00-03] [00] [CODE]
+[SPEC_0] [SPEC_1] [SPEC_2] [SPEC_3]
 ```
-
-| Byte | Description | Values |
-|------|-------------|---------|
-| 0 | **Second Modifier** | Modifier scan code (see table below) |
-| 1 | **First Modifier** | Modifier scan code (see table below) |
-| 2 | **Key Scan Code** | Primary key scan code (see table below) |
-| 3 | **Terminator/Reserved** | Always `0x00` |
 
 ### Modifier Scan Codes
 
@@ -453,36 +448,36 @@ Each key position uses 4 bytes in the following format:
 | R-Ctrl | `0xe4` | Right Control |
 | R-Shift | `0xe5` | Right Shift |
 | R-Alt | `0xe6` | Right Alt |
-| Fn | `0x0a010000` | Function key (special format) |
+| Fn | `0x0a010000` | Function key (special function code) |
 
 ### Important Rules
 
-1. **Modifier Order**: Modifiers must be placed immediately before the main scan code
-2. **Multiple Modifiers**: Up to 2 modifiers can be combined (order doesn't matter)
-3. **Key Disable**: Use `00000000` to disable a physical key
-4. **Fn Key**: Special value `0a010000` - should not be remapped
-5. **Reserved Positions**: Marked as DISABLED in default mapping
+1. **Modifier Order**: Modifiers must be placed immediately before the main scan code.
+2. **Multiple Modifiers**: Up to 2 modifiers can be combined (order doesn't matter).
+3. **Key Disable**: Use `00000000` to disable a physical key.
+4. **Fn Key**: Special value `0a010000`. The FN key can be turned off or moved to another key, but it cannot be used as a modifier like Fn+Key.
+5. **Reserved Positions**: Marked as DISABLED in default mapping.
 
 ### Default Key Mapping
 
 #### Packet 0 - Positions 0-13
 
-| Pos | Physical Key | Default Mapping | Mod2 | Mod1 | Scan Code | Reserved byte |
-|-----|--------------|-----------------|------|------|-----------|---------------|
-| 0 | ESC | KEY_ESC | 0x00 | 0x00 | 0x29 | 0x00 |
-| 1 | Grave | KEY_GRAVE | 0x00 | 0x00 | 0x35 | 0x00 |
-| 2 | TAB | KEY_TAB | 0x00 | 0x00 | 0x2b | 0x00 |
-| 3 | CAPS | KEY_CAPSLOCK | 0x00 | 0x00 | 0x39 | 0x00 |
-| 4 | L-SHIFT | KEY_LEFTSHIFT | 0x00 | 0x00 | 0xe1 | 0x00 |
-| 5 | L-CTRL | KEY_LEFTCTRL | 0x00 | 0x00 | 0xe0 | 0x00 |
-| 6 |  | DISABLED | 0x00 | 0x00 | 0x00 | 0x00 |
-| 7 | 1 | KEY_1 | 0x00 | 0x00 | 0x1e | 0x00 |
-| 8 | Q | KEY_Q | 0x00 | 0x00 | 0x14 | 0x00 |
-| 9 | A | KEY_A | 0x00 | 0x00 | 0x04 | 0x00 |
-| 10 |  | KEY_102ND | 0x00 | 0x00 | 0x64 | 0x00 |
-| 11 |  | DISABLED | 0x00 | 0x00 | 0x00 | 0x00 |
-| 12 | F1 | KEY_F1 | 0x00 | 0x00 | 0x3a | 0x00 |
-| 13 | 2 | KEY_2 | 0x00 | 0x00 | 0x1f | 0x00 |
+| Pos | Physical Key | Default Mapping | Mod2 | Mod1 | Scan Code | Reserved byte | Note |
+|-----|--------------|-----------------|------|------|-----------|---------------|------|
+| 0 | ESC | KEY_ESC | 0x00 | 0x00 | 0x29 | 0x00 | |
+| 1 | Grave | KEY_GRAVE | 0x00 | 0x00 | 0x35 | 0x00 | |
+| 2 | TAB | KEY_TAB | 0x00 | 0x00 | 0x2b | 0x00 | |
+| 3 | CAPS | KEY_CAPSLOCK | 0x00 | 0x00 | 0x39 | 0x00 | |
+| 4 | L-SHIFT | KEY_LEFTSHIFT | 0x00 | 0x00 | 0xe1 | 0x00 | |
+| 5 | L-CTRL | KEY_LEFTCTRL | 0x00 | 0x00 | 0xe0 | 0x00 | |
+| 6 |  | DISABLED | 0x00 | 0x00 | 0x00 | 0x00 | |
+| 7 | 1 | KEY_1 | 0x00 | 0x00 | 0x1e | 0x00 | |
+| 8 | Q | KEY_Q | 0x00 | 0x00 | 0x14 | 0x00 | |
+| 9 | A | KEY_A | 0x00 | 0x00 | 0x04 | 0x00 | |
+| 10 | < | KEY_102ND | 0x00 | 0x00 | 0x64 | 0x00 | this key is not physically present on the keyboard |
+| 11 |  | DISABLED | 0x00 | 0x00 | 0x00 | 0x00 | Disabled position (protocol reserve for other keyboards or layouts) |
+| 12 | F1 | KEY_F1 | 0x00 | 0x00 | 0x3a | 0x00 | |
+| 13 | 2 | KEY_2 | 0x00 | 0x00 | 0x1f | 0x00 | |
 
 #### Packet 1 - Positions 14-27
 
@@ -647,19 +642,13 @@ The keyboard supports multimedia and special functions beyond standard key remap
 
 | Function | Code | XF86 Symbol |
 |----------|------|-------------|
-| Mouse Move Left | 0100f000 | - UNKNOWN - |
-| Mouse Move Right | 0100f100 | - UNKNOWN - |
-| Mouse Move Center | 0100f200 | - UNKNOWN - |
-| Mouse Move Left-Up | 0100f400 | - UNKNOWN - |
-| Mouse Move Left-Down | 0100f300 | - UNKNOWN - |
+| Mouse Click Left | 0100f000 | - UNKNOWN - |
+| Mouse Click Right | 0100f100 | - UNKNOWN - |
+| Mouse Click Center | 0100f200 | - UNKNOWN - |
+| Mouse Click Left-Up | 0100f400 | - UNKNOWN - |
+| Mouse Click Left-Down | 0100f300 | - UNKNOWN - |
 | Mouse Scroll Up | 0100f501 | - UNKNOWN - |
 | Mouse Scroll Down | 0100f5ff | - UNKNOWN - |
-
-  ##### Mouse Functions Note
-
-  ⚠️ **Important**: Mouse movement and scrolling functions (`01 00 f0 00` - `01 00 f5 ff`) have been found to be non-functional in testing on both Windows and Linux systems. While these event codes are present in the protocol, they do not appear to be implemented in the keyboard firmware.
-
-  These mouse-related events are included in the documentation for completeness, but users should be aware they likely will not work in practice.
 
 ### Special Events - Usage Examples
 
@@ -683,6 +672,7 @@ Original: `00002900` → Modified: `00e23a00`
 - Mod2: `0x00` (none)
 - Mod1: `0xe2` (Left Alt)
 - Scan Code: `0x3a` (F1)
+- Null: `0x00`
 
 #### Disable CAPS Lock
 
@@ -690,8 +680,9 @@ Original: `00003900` → Modified: `00000000`
 
 #### Remap Q to Ctrl+Shift+T
 
-Original: `00001400` → Modified: `e0e11700`
+Original: `00001400` → Modified: `00e0e117`
 
+- Null: `0x00`
 - Mod2: `0xe0` (Left Control)
 - Mod1: `0xe1` (Left Shift) 
 - Scan Code: `0x17` (T)
@@ -705,8 +696,8 @@ Original: `00001400` → Modified: `e0e11700`
 - Always send all 9 packets for a complete configuration
 - Maintain the exact packet order (0-8)
 - Reserved positions should remain as `00000000`
-- The Fn key uses special encoding and should not be remapped
-- Modifiers (more than one) can be combined in any order (`e0e23a` = `e2e03a` = Ctrl+Alt+F1)
+- The Fn key uses special key code
+- Modifiers (more than one, maximum of two) can be combined in any order (`e0e23a` = `e2e03a` = Ctrl+Alt+F1)
 
 ## Scan Code Reference
 
