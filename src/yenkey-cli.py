@@ -845,9 +845,9 @@ NOTES:
     def parse_submode(self, submode_str, mode):
         """Parse submode string for specific mode"""
         # Find mode name from mode code
-        mode_name = next((name for name, mode in self.modes.items() 
-                          if mode == mode), None)
-        
+        mode_name = next((name for name, mode_code in self.modes.items()
+                          if mode_code == mode), None)
+
         if not mode_name or mode_name not in self.mode_submodes:
             return 0  # Default submode
         
