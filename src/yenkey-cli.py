@@ -321,7 +321,7 @@ class YenKeyCLI:
             'fadeout': 0x08, 'spiral': 0x09, 'sinusoid': 0x0a, 'kaleidoscope': 0x0b,
             'linear': 0x0c, 'user': 0x0d, 'laser': 0x0e, 'roundwave': 0x0f,
             'shining': 0x10, 'rain2': 0x11, 'horizontal': 0x12, 'staticfade': 0x13,
-            'edm': 0x14, 'screen1': 0x15, 'standard': 0x16, 'surf': 0x17, 'skew': 0x18
+            'music-edm': 0x14, 'screen1': 0x15, 'music-standard': 0x16, 'surf': 0x17, 'skew': 0x18
         }
         
         # Effect submodes
@@ -330,7 +330,7 @@ class YenKeyCLI:
             'snake': {'linear': 0, 'tocenter': 1},
             'kaleidoscope': {'fromcenter': 0, 'tocenter': 1},
             'roundwave': {'counterclockwise': 0, 'clockwise': 1},
-            'edm': {'vzprimene': 0, 'oddelit': 1, 'kriz': 2}
+            'music-edm': {'upright': 0, 'separate': 1, 'cross': 2}
         }
         
         # Predefined colors and their flags
@@ -730,7 +730,7 @@ class YenKeyCLI:
         
         # Key-specific controls group
         key_group = self.parser.add_argument_group('Key-specific Controls')
-        key_group.add_argument('--key-color', 
+        key_group.add_argument('--key-color', action='append', 
                              help='Set individual key colors for user mode (KEY:COLOR,KEY2:COLOR)')
         key_group.add_argument('--key-remap', action='append', 
                              help='Remap key(s) (SOURCE:TARGET or SOURCE:MOD1:MOD2:TARGET)')
@@ -744,6 +744,8 @@ class YenKeyCLI:
 
         # Listing commands group
         listing_group = self.parser.add_argument_group('Listing Commands')
+        listing_group.add_argument('--list-modes', action='store_true', 
+                               help='List modes (with submodes) available')
         listing_group.add_argument('--list-colors', action='store_true', 
                                help='List special function keys available')
         listing_group.add_argument('--list-keys', action='store_true', 
@@ -757,11 +759,13 @@ class YenKeyCLI:
         """Generate comprehensive help epilog"""
         return f"""
 AVAILABLE EFFECTS:
+
   Basic:       {', '.join(list(self.modes.keys())[:8])}
   Advanced:    {', '.join(list(self.modes.keys())[8:16])}
   Special:     {', '.join(list(self.modes.keys())[16:])}
 
 COLOR NAMES:
+
   Basic:       {', '.join(list(NAMED_COLORS.keys())[:8])}
   Extended:    {', '.join(list(NAMED_COLORS.keys())[8:16])}
   Light:       {', '.join(list(NAMED_COLORS.keys())[16:24])}
@@ -769,6 +773,7 @@ COLOR NAMES:
   Full list:   {len(NAMED_COLORS)} named colors available (see --list-colors)
 
 KEY GROUPS for --key-color:
+
   ALL          - All keys
   ALL_F        - Function keys F1-F12
   ALL_MOD      - Modifier keys (Ctrl, Shift, Alt, Meta)
@@ -780,9 +785,11 @@ KEY GROUPS for --key-color:
   ALL_ALPHA    - All alphabetic keys A-Z
 
 SPECIAL FUNCTION KEYS for --key-remap:
+
   Full list:   {len(self.special_codes)} special function keys available (see --list-special-keys)
 
 EXAMPLES:
+
   Basic backlight:
     yenkey-cli.py --mode=static --color=blue --brightness=3
     yenkey-cli.py --mode=wave --submode=right --speed=2 --color=rainbow
@@ -802,7 +809,8 @@ EXAMPLES:
     yenkey-cli.py --keymap-reset
 
 NOTES:
-  - Key colors only work in 'user' mode (--mode=user)
+
+  - Key colors only work in 'user' mode (--mode=user) which must be enabled first
   - Use quotes around complex --key-color and --key-remap values
   - Multiple --key-remap options can be combined
   - Run as root/sudo for USB device access
@@ -869,9 +877,9 @@ NOTES:
         
         raise ValueError(f"Invalid color: {color_str}")
 
-    def parse_user_key_colors(self, key_color_str):
+    def parse_user_key_colors(self, key_color_args):
         """Parse user key colors string into 7 packets with support for ALL:COLOR and key groups"""
-        if not key_color_str:
+        if not key_color_args:
             return []
         
         # Define key groups
@@ -916,54 +924,55 @@ NOTES:
         # Parse key:color pairs and update RGB data
         all_color = None  # Store the ALL color if specified
         
-        for pair in key_color_str.split(','):
-            if ':' not in pair:
-                raise ValueError(f"Invalid key-color pair: {pair}. Use KEY:COLOR")
-            
-            key_name, color_value = pair.split(':', 1)
-            key_name = key_name.upper()
-            
-            # Resolve color (supports named colors and hex)
-            try:
-                hex_color = self.resolve_color(color_value)
-            except ValueError as e:
-                raise ValueError(f"Invalid color in pair {pair}: {e}")
-            
-            r = int(hex_color[0:2], 16)
-            g = int(hex_color[2:4], 16)
-            b = int(hex_color[4:6], 16)
-            
-            # Handle ALL:COLOR - set as default color for all keys
-            if key_name == 'ALL':
-                all_color = (r, g, b)
-                continue
-            
-            # Handle key groups
-            if key_name in key_groups:
-                group_keys = key_groups[key_name]
-                for group_key in group_keys:
-                    if group_key in self.user_key_positions:
-                        position = self.user_key_positions[group_key]
-                        rgb_data[position * 3] = r
-                        rgb_data[position * 3 + 1] = g
-                        rgb_data[position * 3 + 2] = b
-                continue
-            
-            # Handle individual keys
-            if key_name not in self.user_key_positions:
-                # Check if it might be a group that doesn't exist
-                if key_name.startswith('ALL_'):
-                    available_groups = ', '.join(key_groups.keys())
-                    raise ValueError(f"Unknown key group: {key_name}. Available groups: {available_groups}")
-                else:
-                    raise ValueError(f"Unknown key for user mode: {key_name}")
-            
-            position = self.user_key_positions[key_name]
-            
-            # Update RGB data for this position
-            rgb_data[position * 3] = r
-            rgb_data[position * 3 + 1] = g
-            rgb_data[position * 3 + 2] = b
+        for key_color_str in key_color_args:
+            for pair in key_color_str.split(','):
+                if ':' not in pair:
+                    raise ValueError(f"Invalid key-color pair: {pair}. Use KEY:COLOR")
+                
+                key_name, color_value = pair.split(':', 1)
+                key_name = key_name.upper()
+                
+                # Resolve color (supports named colors and hex)
+                try:
+                    hex_color = self.resolve_color(color_value)
+                except ValueError as e:
+                    raise ValueError(f"Invalid color in pair {pair}: {e}")
+                
+                r = int(hex_color[0:2], 16)
+                g = int(hex_color[2:4], 16)
+                b = int(hex_color[4:6], 16)
+                
+                # Handle ALL:COLOR - set as default color for all keys
+                if key_name == 'ALL':
+                    all_color = (r, g, b)
+                    continue
+                
+                # Handle key groups
+                if key_name in key_groups:
+                    group_keys = key_groups[key_name]
+                    for group_key in group_keys:
+                        if group_key in self.user_key_positions:
+                            position = self.user_key_positions[group_key]
+                            rgb_data[position * 3] = r
+                            rgb_data[position * 3 + 1] = g
+                            rgb_data[position * 3 + 2] = b
+                    continue
+                
+                # Handle individual keys
+                if key_name not in self.user_key_positions:
+                    # Check if it might be a group that doesn't exist
+                    if key_name.startswith('ALL_'):
+                        available_groups = ', '.join(key_groups.keys())
+                        raise ValueError(f"Unknown key group: {key_name}. Available groups: {available_groups}")
+                    else:
+                        raise ValueError(f"Unknown key for user mode: {key_name}")
+                
+                position = self.user_key_positions[key_name]
+                
+                # Update RGB data for this position
+                rgb_data[position * 3] = r
+                rgb_data[position * 3 + 1] = g
+                rgb_data[position * 3 + 2] = b
         
         # If ALL color was specified, apply it to all positions
         if all_color:
@@ -1206,6 +1215,15 @@ NOTES:
                 else:
                     print("Key mapping reset failed")
                 return
+            
+            if args.list_modes:
+                  print("Modes (with submodes) available:")
+                  print("-" * 50)
+                  for mode in self.modes:
+                      print(f" - {mode}")
+                      if mode in self.mode_submodes:
+                          print("   -", "\n   - ".join(self.mode_submodes[mode]))
+                  return
             
             if args.list_colors:
                   print("Colors (names) available:")
