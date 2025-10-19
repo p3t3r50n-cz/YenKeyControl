@@ -1,5 +1,7 @@
 # Yenkee 3700 Rogue Keyboard - Prototyping Controller Utility
 
+Simple prototyping script for functionality verification and packet debugging.
+
 **See source code:** [yeneky-proto.py](/src/yenkey-proto.py)
 
 ## Overview
