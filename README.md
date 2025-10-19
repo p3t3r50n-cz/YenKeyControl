@@ -16,11 +16,11 @@ This comprehensive documentation and command-line utilites are the result of met
 
 ### Source Code
 - **[YenKey Proto](/src/yenkey-proto.py)**  
-  Simple prototyping script for functionality verification and packet debugging.
+  Simple prototyping script for functionality verification and packet debugging.  
   *Documentation: [yenkey-proto](/docs/yenkey-proto.md)*
 
 - **[YenKey CLI](/src/yenkey-cli.py)**  
-  Complete command-line utility for backlight effects, key colors, and key remapping.
+  Complete command-line utility for backlight effects, key colors, and key remapping.  
   *Documentation: [yenkey-cli](/docs/yenkey-cli.md)*
 
 ### Communication Protocol Documentation Structure
