@@ -2,7 +2,7 @@
 
 A comprehensive Python command-line utility for controlling **Yenkee YKB3700 Rogue** (and probably others based on a similar ROYUAN chipset) keyboard backlight effects, key colors, and key remapping through reverse-engineered USB protocol.
 
-**See source code:** [yenkey-cli.php](/src/yenkey-cli.php)
+**See source code:** [yenkey-cli.py](/src/yenkey-cli.py)
 
 ## Features
 
