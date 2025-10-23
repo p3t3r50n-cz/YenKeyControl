@@ -1,6 +1,15 @@
 # Yenkee 3700 Rogue Keyboard - Communication protocols
 
-## Lighting Effects Protocol
+This documentation is divided into main sections:
+
+1. [**Backlight Effects Protocol**](#backlight-effects-protocol) - Control global effects, colors, brightness, and animation speeds
+2. [**Per-Key RGB Control**](#key-color-protocol) - Individual key color programming (see separate documentation)
+3. [**Per-Key remapping**](#key-remapping-protocol) - Describes the options for reassigning individual keys to different functions (e.g., sending different scancodes)
+4. [**Read Configuration from keyboard**](#read-configuration-protocol)) - Describes the options for reassigning individual keys to different functions (e.g., sending different scancodes)
+
+----
+
+## Backlight Effects Protocol
 
 ## Overview
 
@@ -146,7 +155,9 @@ This appears to be a SET_REPORT request for audio input configuration and requir
 ----
 
 
-## User-mode Backlight Protocol - setting custom color for each key
+## Key Color Protocol
+
+Setting custom color for each key.
 
 ### Overview
 
@@ -340,7 +351,7 @@ The sequence number in the header decreases with each packet (72, 71, 70, ..., 6
 
 ---
 
-## Yenkee 3700 Rogue Keyboard Key Remapping Protocol
+## Key Remapping Protocol
 
 ### Overview
 
@@ -652,3 +663,139 @@ Common scan codes used in the default mapping:
 - Function Keys: F1=`0x3a`, F2=`0x3b`, ..., F12=`0x45`
 - Navigation: LEFT=`0x50`, RIGHT=`0x4f`, UP=`0x52`, DOWN=`0x51`
 - Special: ENTER=`0x28`, SPACE=`0x2c`, TAB=`0x2b`, ESC=`0x29`
+
+----
+
+## Read Configuration Protocol
+
+### Overview
+
+This document describes the protocol for reading current configuration settings from the Yenkee 3700 Rogue keyboard. The protocol allows querying backlight settings, per-key RGB colors, and key remapping configurations via SET_REPORT/GET_REPORT requests.
+
+### Basic Read Protocol
+
+### Command Structure
+
+The read protocol uses a SET_REPORT/GET_REPORT sequence:
+ - SET_REPORT: Send configuration query packet
+ - GET_REPORT: Receive current settings data
+
+### USB Control Transfer Parameters
+ - bmRequestType: 0xA1 (IN/Class/Interface)
+ - bRequest: 0x01 (GET_REPORT)
+ - wValue: 0x0300 | report_id (Feature report + Report ID)
+ - wIndex: 0x0001 (Interface)
+ - wLength: 64 (data size)
+
+### Configuration Areas
+
+#### 1. Reading Global Backlight Settings
+
+Query Packet
+```
+SET_REPORT: 87000000000000
+```
+
+Response Format (64 bytes)
+```
+[00] [MODE] [SPEED] [BRIGHTNESS] [FLAGS] [RED] [GREEN] [BLUE] [00...00]
+```
+
+##### Response Byte Mapping
+Byte | Description | Values
+-----|-------------|--------
+0 | Response Type | 0x87
+1 | Mode | 0x00-0x18 (see Mode Reference)
+2 | Speed | 0x01-0x0B (animation speed)
+3 | Brightness | 0x00=Off, 0x01-0x04=Brightness levels
+4 | Flags	Submode | (high nibble) + Color Flag (low nibble)
+5 | Red | Red component (when custom RGB)
+6 | Green | Green component (when custom RGB)
+7 | Blue | Blue component (when custom RGB)
+8-63 | Padding | 0x00
+
+##### Flags Decoding
+- Submode: (flags >> 4) & 0x0F
+- Color Flag: flags & 0x0F
+
+#### 2. Reading Per-Key RGB Colors
+
+##### Query Sequence
+
+Send 6 SET_REPORT packets sequentially:
+ - 8c000000000000
+ - 8c000100000000
+ - 8c000200000000
+ - 8c000300000000
+ - 8c000400000000
+ - 8c000500000000
+
+##### Response Format
+
+Each GET_REPORT returns 64 bytes containing RGB data for multiple keys.
+
+##### RGB Data Structure
+ - 3 bytes per key: RR GG BB
+ - 148 total positions (0-147)
+ - Total data: 444 bytes (148 × 3)
+
+##### Data Organization
+
+The RGB data is split across 6 packets:
+Packet | Key Range | Data Bytes
+-------|-----------|------------
+0 | 0-20 | 63 bytes RGB + next bytes split
+1 | 21-42 | 66 bytes RGB
+2 | 43-65 | 69 bytes RGB
+3 | 66-88 | 69 bytes RGB
+4 | 89-111 | 69 bytes RGB
+5 | 112-147 | 108 bytes RGB
+
+##### Key Position Mapping
+
+Same as user-mode backlight protocol (positions 0-147).
+
+#### 3. Reading Key Remapping Settings
+
+##### Query Sequence
+Send 8 SET_REPORT packets sequentially:
+- 89000000000000
+- 89000100000000
+- 89000200000000
+- 89000300000000
+- 89000400000000
+- 89000500000000
+- 89000600000000
+- 89000700000000
+
+##### Response Format
+Each GET_REPORT returns 64 bytes containing remap data for multiple keys.
+
+##### Remap Data Structure
+ - 4 bytes per key:
+   - `[00] [00] [00] [SCANCODE]` - for single key
+   - or `[00] [MOD1] [SCANCODE] [00]` - for key with one modifier
+   - or `[00] [MOD2] [MOD1] [SCANCODE]` - for key woth two modifiers
+   - or `[SPEC_0] [SPEC_1] [SPEC_2] [SPEC_3]` - for special function code
+ - 126 total positions (0-125)
+ - Total data: 504 bytes (126 × 4)
+
+##### Data Organization
+The remap data is split across 8 packets:
+
+Packet | Key Range | Data Bytes
+-------|-----------|------------
+0 | 0-15 | 64 bytes (16 keys)
+1	| 16-31 | 64 bytes (16 keys)
+2	| 32-47 | 64 bytes (16 keys)
+3	| 48-63 | 64 bytes (16 keys)
+4	| 64-79 | 64 bytes (16 keys)
+5	| 80-95 | 64 bytes (16 keys)
+6	| 96-111 | 64 bytes (16 keys)
+7	| 112-125 | 56 bytes (14 keys) + 8 padding
+
+##### Implementation Details
+
+- Timing Considerations
+- Delay between packets: 100ms recommended
+- Complete sequence time: ~1-2 seconds for all configurations
