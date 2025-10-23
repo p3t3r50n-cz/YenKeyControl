@@ -25,11 +25,12 @@ This comprehensive documentation and command-line utilites are the result of met
 
 ### Communication Protocol Documentation Structure
 
-This documentation is divided into three main sections:
+This documentation is divided into main sections:
 
-1. [**Lighting Effects Protocol**](/docs/communication-protocol.md#lighting-effects-protocol) - Control global effects, colors, brightness, and animation speeds
-2. [**Per-Key RGB Control**](/docs/communication-protocol.md#user-mode-backlight-protocol---setting-custom-color-for-each-key) - Individual key color programming (see separate documentation)
-3. [**Per-Key remapping**](/docs/communication-protocol.md#yenkee-3700-rogue-keyboard-key-remapping-protocol) - Describes the options for reassigning individual keys to different functions (e.g., sending different scancodes)
+1. [**Backlight Effects Protocol**](/docs/communication-protocol.md#backlight-effects-protocol) - Control global effects, colors, brightness, and animation speeds
+2. [**Per-Key RGB Control**](/docs/communication-protocol.md#key-color-protocol) - Individual key color programming (see separate documentation)
+3. [**Per-Key remapping**](/docs/communication-protocol.md#key-remapping-protocol) - Describes the options for reassigning individual keys to different functions (e.g., sending different scancodes)
+4. [**Read Configuration from keyboard**](/docs/communication-protocol.md#read-configuration-protocol) - Describes the options for reassigning individual keys to different functions (e.g., sending different scancodes)
 
 ### What We've Uncovered
 
