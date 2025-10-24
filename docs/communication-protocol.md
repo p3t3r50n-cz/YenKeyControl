@@ -383,7 +383,7 @@ Each key position uses 4 bytes in the following format:
 
 **Common Keys (scancodes):**
 ```
-[00] [00] [SCANCODE] [00]   # Standard scancode without modifiers
+[00] [00] [SCANCODE] [00]        # Standard scancode without modifiers
 [00] [MOD1] [SCANCODE] [00]      # Standard scanocode with one modifier
 [00] [MOD2] [MOD1] [SCANCODE]    # Standard scancode with two modifiers
 ```
