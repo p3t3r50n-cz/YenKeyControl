@@ -5,8 +5,8 @@ This documentation is divided into main sections:
 1. [**Backlight Effects Protocol**](#backlight-effects-protocol) - Control global effects, colors, brightness, and animation speeds
 2. [**Per-Key RGB Control**](#key-color-protocol) - Individual key color programming (see separate documentation)
 3. [**Per-Key remapping**](#key-remapping-protocol) - Describes the options for reassigning individual keys to different functions (e.g., sending different scancodes)
-4. [**Read Configuration from keyboard**](#read-configuration-protocol)) - Describes the options for reassigning individual keys to different functions (e.g., sending different scancodes)
-5. [**Audio Reaction**](#audio-reaction-protocol)) - Describes the options for audio reaction
+4. [**Read Configuration from keyboard**](#read-configuration-protocol) - Describes the options for reassigning individual keys to different functions (e.g., sending different scancodes)
+5. [**Audio Reaction**](#audio-reaction-protocol) - Describes the options for audio reaction
 
 ----
 
