@@ -6,7 +6,7 @@ Command-line interface for "Yenkey YKB3700 Rogue" keyboard - backlight and key c
 Author: Petr Palacky
 AI Collaboration: DeepSeek, GPT
 Date: 2025
-Version: 0.2
+Version: 0.3
 
 Project page: https://github.com/p3t3r50n-cz/YenKeyControl
 
@@ -23,6 +23,7 @@ Features:
 - Mouse emulation and application launchers
 - FN key repositioning and customization
 - Read current settings directly from keyboard
+- Music reaction (not yet perfect - still proof of concept)
 
 License:
 This program is free software: you can redistribute it and/or modify
@@ -59,6 +60,33 @@ import glob
 import os
 import json
 from pathlib import Path
+import numpy as np
+
+import alsaaudio
+import array
+import math
+import sounddevice as sd
+import threading
+import subprocess
+#import pulsectl
+
+# Nastavení
+SAMPLE_RATE = 48000
+BLOCKSIZE = 4096   # velikost bufferu v počtu sample/frame (latence ~ BLOCKSIZE/SAMPLE_RATE s)
+CHANNELS = 2       # 1 = mono, 2 = stereo
+
+# Pokud znáš device index nebo name, nastav -> device = 3 nebo device = "alsa_output...monitor"
+# Jinak nech device = None a vybere se default.
+DEVICE = None
+
+SAMPLE_RATE = 44100
+BLOCK_SECONDS = 0.08      # update každých ~80 ms
+CHANNELS = 1
+
+NUM_ROWS = 6
+
+# prah pro peak (relativní k 1.0 signálu)
+PEAK_BOOST_THRESHOLD = 0.15
 
 IFACE = 1
 
@@ -351,8 +379,8 @@ class YenkeeProto:
     def _setupCommunication(self):
         """Setup USB communication on Interface 0"""
         try:
-            if self.dev.is_kernel_driver_active(0):
-                self.dev.detach_kernel_driver(0)
+            #if self.dev.is_kernel_driver_active(0):
+            #    self.dev.detach_kernel_driver(0)
             if self.dev.is_kernel_driver_active(1):
                 self.dev.detach_kernel_driver(1)
             return True
@@ -373,17 +401,24 @@ class YenkeeProto:
             hex_clean = data.replace(" ", "")
             main_data = bytes.fromhex(hex_clean)
 
-            debugPrint(DEBUG_LEVELS['DEBUG'], f"Sending: {description} [{hex_clean}]")
+            debugPrint(DEBUG_LEVELS['DEBUG'], f"Sending: {description}      [{hex_clean}]")
 
             if len(main_data) > 64:
                 print("  Warning: Data longer than 64 bytes, truncating")
                 main_data = main_data[:64]
 
+            #if len(main_data) < 8:
+                #main_data += b"\x00" * (8 - len(main_data))
+
+            #if len(main_data) < 9:
             if len(main_data) < 64:
                 checksum = bytes([(0x100 - ((sum(main_data) + 1) & 0xFF)) & 0xFF])
+                debugPrint(DEBUG_LEVELS['DEBUG'], f"Sending: {description} checksum: {checksum.hex()}")
                 main_data += checksum
 
             main_data += b"\x00" * (64 - len(main_data))
+
+            debugPrint(DEBUG_LEVELS['DEBUG'], f"Sending: {description} full [{main_data.hex()}]")
 
             response = self.dev.ctrl_transfer(0x21, 0x09, 0x0300, IFACE, main_data)
             debugPrint(DEBUG_LEVELS['DEBUG'], f"  Command sent successfully\n")
@@ -435,22 +470,52 @@ class YenkeeProto:
         """Clean up USB communication"""
         if self.dev:
             try:
-                self.dev.attach_kernel_driver(1)
-                self.dev.attach_kernel_driver(0)
-            except:
-                pass
-            if self.dev:
-                usb.util.dispose_resources(self.dev)
-                self.dev = None
-            if self.sysfs_path:
+                # Release interface first
                 try:
-                    # Rebind USB device to refresh connection
-                    with open("/sys/bus/usb/drivers/usb/unbind", "w") as f:
-                        f.write(self.sysfs_path)
-                    with open("/sys/bus/usb/drivers/usb/bind", "w") as f:
-                        f.write(self.sysfs_path)
+                    usb.util.release_interface(self.dev, 1)
                 except:
                     pass
+
+                ## Reset device to default state
+                #try:
+                    #self.dev.reset()
+                #except:
+                    #pass
+
+                # Reattach kernel driver
+                try:
+                    self.dev.attach_kernel_driver(1)
+                except:
+                    pass
+
+            except Exception as e:
+                debugPrint(DEBUG_LEVELS['DEBUG'], f"USB cleanup error: {e}")
+            finally:
+                if self.dev:
+                    usb.util.dispose_resources(self.dev)
+                    self.dev = None
+
+    # Disconnect with force re-bind
+    #def disconnect(self):
+        #"""Clean up USB communication"""
+        #if self.dev:
+            #try:
+                #self.dev.attach_kernel_driver(1)
+                ##self.dev.attach_kernel_driver(0)
+            #except:
+                #pass
+            #if self.dev:
+                #usb.util.dispose_resources(self.dev)
+                #self.dev = None
+            #if self.sysfs_path:
+                #try:
+                    ## Rebind USB device to refresh connection
+                    #with open("/sys/bus/usb/drivers/usb/unbind", "w") as f:
+                        #f.write(self.sysfs_path)
+                    #with open("/sys/bus/usb/drivers/usb/bind", "w") as f:
+                        #f.write(self.sysfs_path)
+                #except:
+                    #pass
 
 class YenKeyCLI:
     """Main CLI controller for YenKey keyboard"""
@@ -493,7 +558,8 @@ class YenKeyCLI:
             'pink': (0x04, 0xFF, 0x14, 0x93),
             'yellow': (0x05, 0xFF, 0xFF, 0x00),
             'white': (0x06, 0xFF, 0xFF, 0xFF),
-            'rainbow': (0x07, 0x00, 0x00, 0x00)  # Special case
+            'rainbow': (0x07, 0x00, 0x00, 0x00),  # Special case
+            'green-red': (0x02, 0x00, 0x00, 0x00)  # Special case for music-edm
         }
 
         self.keyPositions = {
@@ -788,6 +854,15 @@ class YenKeyCLI:
                                    help='Set backlight brightness (0=off, 1=dim, 4=brightest)')
 
         # Key-specific controls group
+        audio_group = self.parser.add_argument_group('Audio Controls')
+        audio_group.add_argument('--audio', action='store_true', 
+                             help='Audio reaction')
+        audio_group.add_argument('--source',
+                             help='Audio reaction source [system = default | mic]')
+        audio_group.add_argument('--device',
+                             help='Audio device listening from (default = "alsa_output.pci-0000_00_1b.0.analog-stereo.monitor")')
+
+        # Key-specific controls group
         key_group = self.parser.add_argument_group('Key-specific Controls')
         key_group.add_argument('--key-color', action='append', 
                              help='Set individual key colors for user mode (KEY:COLOR,KEY2:COLOR)')
@@ -846,6 +921,7 @@ class YenKeyCLI:
 
         # Debug groups
         debugGroup = self.parser.add_argument_group('Debug Options')
+        debugGroup.add_argument('--raw', help='Send RAW data as SET_REPORT and get response from GET_REPORT')
         debugGroup.add_argument('--debug',
                                choices=list(DEBUG_LEVELS.keys()),
                                default='INFO',
@@ -878,6 +954,7 @@ HARDWARE IDENTIFICATION:
   --pid PID            - USB Product ID in hexadecimal (default: 0x4002)
 
 DEBUG OPTIONS:
+  --raw DATA           - Send RAW data as SET_REPORT and get response from GET_REPORT
   --debug LEVEL        - Set debug output level: {', '.join(DEBUG_LEVELS.keys())}
 
 EXAMPLES:
@@ -894,6 +971,11 @@ EXAMPLES:
     yenkey-cli.py --key-remap=KEY_CAPSLOCK:KEY_RIGHTCTRL
     yenkey-cli.py --key-remap=KEY_F1:KEY_RIGHTCTRL:KEY_RIGHTALT:KEY_F1
     yenkey-cli.py --key-remap=KEY_F1:00e23a00
+
+  Audio mapping:
+    yenkey-cli.py --mode music-edm --submode cross --color green-red
+    yenkey-cli.py --audio --souce mic --device "alsa_output.pci-0000_00_1b.0.analog-stereo.monitor"
+                  (for --device see output from: `pactl list short sources`)
 
   Presets:
     yenkey-cli.py --list-presets
@@ -1439,8 +1521,8 @@ NOTES:
         # Reverse lookup map for modes
         modesMap = {v: k for k, v in self.modes.items()}
     
-        # Reverse lookup for colors
-        colorMap = {v[0]: name for name, v in self.predefinedColors.items()}
+        # Reverse lookup for colors (without special case green-red for music-edm)
+        colorMap = {v[0]: name for name, v in self.predefinedColors.items() if name != 'green-red'}
     
         # Mode
         mode_name = modesMap.get(settings['mode'], 'Unknown')
@@ -1458,12 +1540,24 @@ NOTES:
         else:
             #print(f"{'Submode:':<{label_width}}Default ({settings['submode']})")
             print(f"{'Mode:':<{label_width}}{mode_name}")
+        
         print(f"{'Speed:':<{label_width}}{settings['speed']}")
         print(f"{'Brightness:':<{label_width}}{settings['brightness']}")
     
         # Color handling
         color_flag = settings.get('color_flag', 0)
-        if color_flag == 8:
+        if settings['mode'] == 20:
+            if color_flag == 1:
+                print(f"{'Color:':<{label_width}}rainbow")
+            elif color_flag == 2:
+                print(f"{'Color:':<{label_width}}red bars on green background")
+            else:
+                # Custom RGB color
+                r, g, b = settings.get('r', 0), settings.get('g', 0), settings.get('b', 0)
+                colorName = self.colorHexToName(f"{r:02x}{g:02x}{b:02x}")
+                print(f"{'Color:':<{label_width}}Custom RGB:({r}, {g}, {b}), #{r:02x}{g:02x}{b:02x}" +
+                      (f", {colorName}" if colorName is not None else ""))
+        elif color_flag == 8:
             # Custom RGB color
             r, g, b = settings.get('r', 0), settings.get('g', 0), settings.get('b', 0)
             colorName = self.colorHexToName(f"{r:02x}{g:02x}{b:02x}")
@@ -1616,7 +1710,9 @@ NOTES:
             
             success = self.setBacklight() and success
         
+            self.proto.disconnect()
             time.sleep(1)
+            self.proto = YenkeeProto()
         
         # Apply key colors
         if 'key-colors' in preset and preset['key-colors']:
@@ -1749,6 +1845,24 @@ NOTES:
         except Exception as e:
             debugPrint(DEBUG_LEVELS['ERROR'], f"Error loading preset from file '{presetFile}': {e}")
 
+    def sendRawPackets(self, packets):
+        for request in re.split(r'\s*[,;| ]\s*', packets):
+            if not self.proto.setReport(request, 'SET_REPORT: RAW data'):
+                print("SET_REPORT failed")
+                return None
+
+            time.sleep(0.1)
+
+            # Read GET_REPORT response
+            response_b = self.proto.getReport(64, 'GET_REPORT: RAW data')
+            response = bytes(response_b)
+            if not response:
+                print("GET_REPORT failed")
+                return None
+
+            debugPrint(DEBUG_LEVELS['INFO'], f"Request:  {request}")
+            debugPrint(DEBUG_LEVELS['INFO'], f"Response: {response.hex()}")
+
     def run(self):
         """Main CLI execution"""
         args = self.parser.parse_args()
@@ -1764,6 +1878,36 @@ NOTES:
         success = True
 
         try:
+            
+            if args.raw:
+                success = self.sendRawPackets(args.raw) and success
+                return
+            
+            if args.audio:
+                
+                def sendPayload(hexstr):
+                    print(time.strftime("%H:%M:%S"), hexstr)
+                    self.proto.setReport('0d000000000000f2' + hexstr, 'music payload')
+                
+                audioMapper = AudioMapper(
+                    self.proto,
+                    samplerate=44100,
+                    blocksize=2048,
+                    max_byte_value=0x20,
+                    audio_source = args.source or 'system',
+                    audio_device = args.device or 'alsa_output.pci-0000_00_1b.0.analog-stereo.monitor',
+                )
+
+                print("Start monitoring (Ctrl+C to stop)...")
+                
+                try:
+                    audioMapper.run()
+                finally:
+                    self.proto.setReport(
+                        '0d000000000000f2',
+                        'music payload clear'
+                    )
+            
             # Handle reset commands first
             if args.factory_reset:
                 success = self.factoryReset() and success
@@ -1882,6 +2026,21 @@ NOTES:
                     self.backlightSettings['b'] = b
                     config_updated = True
 
+                # Set music color
+                if self.backlightSettings['mode'] == 20 and args.color:
+                    if args.color == 'rainbow':
+                        self.backlightSettings['color_flag'] = 1
+                        config_updated = True
+                    elif args.color == 'green-red':
+                        self.backlightSettings['color_flag'] = 2
+                        config_updated = True
+                    elif args.color == 'red':
+                        self.backlightSettings['color_flag'] = 3
+                        config_updated = True
+                    else:
+                        self.backlightSettings['color_flag'] = 4
+                        config_updated = True
+
                 # Set backlight animation speed
                 if args.speed is not None:
                     self.backlightSettings['speed'] = args.speed
@@ -1894,6 +2053,7 @@ NOTES:
 
                 # Send backlight configuration if any parameter was updated
                 if config_updated:
+                    print(self.backlightSettings)
                     success = self.setBacklight() and success
 
             # Handle key colors (user mode only)
@@ -1955,6 +2115,198 @@ NOTES:
         finally:
             self.proto.disconnect()
 
+class AudioMapper:
+    """
+    6 řad klávesnice = 6 hudebních znaků:
+
+    0: Overall loudness (RMS)
+    1: Bass energy
+    2: Bass peak
+    3: Mid energy
+    4: Treble energy
+    5: Transient / attack
+    """
+
+    def __init__(
+        self,
+        proto,
+        samplerate=44100,
+        blocksize=2048,
+        max_byte_value=0x20,
+        audio_source='system',
+        audio_device=None
+    ):
+        self.proto = proto
+        self.samplerate = samplerate
+        self.blocksize = blocksize
+        self.max_byte_value = max_byte_value
+
+        self.num_bytes = 56
+        self.n_rows = 6
+
+        # adaptive reference values
+        self._rms_ref = 1e-6
+        self._bass_ref = 1e-6
+        self._bass_peak_ref = 1e-6
+        self._mid_ref = 1e-6
+        self._treb_ref = 1e-6
+        self._trans_ref = 1e-6
+        self._prev_energy = 0.0
+        
+        self.audio_source = audio_source
+        self.audio_device = audio_device
+
+    # -------------------------------------------------------------
+
+    def _run_system_audio(self):
+        device = self.audio_device or 'alsa_output.pci-0000_00_1b.0.analog-stereo.monitor'
+    
+        cmd = [
+            'parec',
+            f'--device={device}',
+            '--format=float32le',
+            f'--rate={self.samplerate}',
+            '--channels=1',
+            '--latency=5ms'
+        ]
+    
+        print(f"Listening to system audio via parec ({device})")
+    
+        proc = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL
+        )
+    
+        bytes_per_block = self.blocksize * 4  # float32
+    
+        try:
+            while True:
+              
+                if proc.poll() is not None:
+                    break
+              
+                raw = proc.stdout.read(bytes_per_block)
+                if not raw:
+                    break
+    
+                mono = np.frombuffer(raw, dtype=np.float32)
+                if mono.size != self.blocksize:
+                    continue
+    
+                packet = self.map_audio_features_to_packet(mono)
+                hexstr = self._to_hex_string(packet)
+    
+                debugPrint(DEBUG_LEVELS['DEBUG'], f"Audio packet: {hexstr}")
+                self.proto.setReport(
+                    '0d000000000000f2' + hexstr,
+                    'music payload'
+                )
+    
+        except KeyboardInterrupt:
+            print("Stopping system audio monitor...")
+    
+        finally:
+            proc.terminate()
+            proc.stdout.close()
+
+    def _run_microphone(self):
+        print("Listening to microphone via sounddevice")
+    
+        with sd.InputStream(
+            channels=1,
+            samplerate=self.samplerate,
+            blocksize=self.blocksize,
+            dtype='float32'
+        ) as stream:
+    
+            try:
+                while True:
+                    data, _ = stream.read(self.blocksize)
+                    mono = data[:, 0]
+    
+                    packet = self.map_audio_features_to_packet(mono)
+                    hexstr = self._to_hex_string(packet)
+    
+                    debugPrint(DEBUG_LEVELS['DEBUG'], f"Audio packet: {hexstr}")
+                    self.proto.setReport(
+                        '0d000000000000f2' + hexstr,
+                        'music payload'
+                    )
+    
+            except KeyboardInterrupt:
+                print("Stopping microphone monitor...")
+
+    def _normalize(self, value, ref, gamma=0.7):
+        if ref < 1e-9:
+            return 0.0
+        return np.clip((value / ref) ** gamma, 0.0, 1.0)
+
+    # -------------------------------------------------------------
+
+    def map_audio_features_to_packet(self, mono):
+        spectrum = np.abs(np.fft.rfft(mono))
+        freqs = np.fft.rfftfreq(len(mono), 1 / self.samplerate)
+
+        # Frequency bands
+        bass = (freqs >= 40) & (freqs < 150)
+        mids = (freqs >= 150) & (freqs < 2000)
+        treble = (freqs >= 2000) & (freqs < 8000)
+
+        bass_energy = np.mean(spectrum[bass]) if np.any(bass) else 0.0
+        bass_peak = np.max(spectrum[bass]) if np.any(bass) else 0.0
+        mid_energy = np.mean(spectrum[mids]) if np.any(mids) else 0.0
+        treb_energy = np.mean(spectrum[treble]) if np.any(treble) else 0.0
+
+        # Loudness
+        rms = np.sqrt(np.mean(mono ** 2))
+
+        # Transient
+        total_energy = bass_energy + mid_energy + treb_energy
+        transient = max(0.0, total_energy - self._prev_energy)
+        self._prev_energy = total_energy
+
+        # Update adaptive refs (slow AGC)
+        self._rms_ref = max(self._rms_ref * 0.995, rms)
+        self._bass_ref = max(self._bass_ref * 0.995, bass_energy)
+        self._bass_peak_ref = max(self._bass_peak_ref * 0.995, bass_peak)
+        self._mid_ref = max(self._mid_ref * 0.995, mid_energy)
+        self._treb_ref = max(self._treb_ref * 0.995, treb_energy)
+        self._trans_ref = max(self._trans_ref * 0.995, transient)
+
+        values = [
+            self._normalize(rms, self._rms_ref),               # Row 0
+            self._normalize(bass_energy, self._bass_ref),      # Row 1
+            self._normalize(bass_peak, self._bass_peak_ref),   # Row 2
+            self._normalize(mid_energy, self._mid_ref),        # Row 3
+            self._normalize(treb_energy, self._treb_ref),      # Row 4
+            self._normalize(transient, self._trans_ref, 0.5), # Row 5
+        ]
+
+        packet = np.zeros(self.num_bytes, dtype=np.uint8)
+        for i, v in enumerate(values):
+            packet[i] = int(np.clip(
+                v * self.max_byte_value,
+                0,
+                self.max_byte_value
+            ))
+
+        return packet
+
+    # -------------------------------------------------------------
+
+    def _to_hex_string(self, packet):
+        return ''.join(f"{b:02x}" for b in packet)
+
+    # -------------------------------------------------------------
+
+    def run(self):
+        print("Musical feature monitoring started (Ctrl+C to stop)")
+
+        if self.audio_source == 'mic':
+            self._run_microphone()
+        else:
+            self._run_system_audio()
 
 if __name__ == "__main__":
     cli = YenKeyCLI()
