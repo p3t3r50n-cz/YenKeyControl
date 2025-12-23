@@ -2053,7 +2053,6 @@ NOTES:
 
                 # Send backlight configuration if any parameter was updated
                 if config_updated:
-                    print(self.backlightSettings)
                     success = self.setBacklight() and success
 
             # Handle key colors (user mode only)
