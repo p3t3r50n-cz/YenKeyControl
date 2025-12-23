@@ -6,6 +6,7 @@ This documentation is divided into main sections:
 2. [**Per-Key RGB Control**](#key-color-protocol) - Individual key color programming (see separate documentation)
 3. [**Per-Key remapping**](#key-remapping-protocol) - Describes the options for reassigning individual keys to different functions (e.g., sending different scancodes)
 4. [**Read Configuration from keyboard**](#read-configuration-protocol)) - Describes the options for reassigning individual keys to different functions (e.g., sending different scancodes)
+5. [**Audio Reaction**](#audio-reaction-protocol)) - Describes the options for audio reaction
 
 ----
 
@@ -799,3 +800,101 @@ Packet | Key Range | Data Bytes
 - Timing Considerations
 - Delay between packets: 100ms recommended
 - Complete sequence time: ~1-2 seconds for all configurations
+
+----
+
+## Audio Reaction Protocol
+
+### Overview
+
+This document describes the communication protocol used to enable and control music-reactive lighting on the Yenkee 3700 Rogue mechanical backlit keyboard.  
+
+The protocol consists of two packet types:
+
+- a **mode configuration packet**
+- continuous **music data packets** that define light bar levels
+
+### 1. Setting the Music Reaction Mode
+
+To activate audio-reactive lighting, set the effect mode to `music-standard` or `music-edm` together with one of the available sub-modes (`upright`, `separate`, or `cross`).  
+Refer to the [Backlight Effects Protocol](#backlight-effects-protocol) section above for general effect mode handling.
+
+**Example packet:**
+
+```0714030421000000```
+
+This example sets `music-edm / cross` mode with `rainbow` coloring.
+
+#### Packet Structure (8 bytes)
+
+Byte | Description | Value | Notes
+-----|-------------|-------|------
+0 | Command | 0x07 | Command identifier
+1 | Effect Mode | 0x14 | Music EDM mode
+2 | Animation Speed | 0x03 | Animation speed (no effect in audio reaction mode)
+3 | Backlight Brightness | 0x04 | Backlight brightness level
+4 | Effect Sub-mode & Color Flag | 0x21 | High nibble: sub-mode, Low nibble: color flag
+5 | RGB Red Component | 0x00 | Used only if color flag = 4 (custom RGB)
+6 | RGB Green Component | 0x00 | Used only if color flag = 4 (custom RGB)
+7 | RGB Blue Component | 0x00 | Used only if color flag = 4 (custom RGB)
+
+#### Effect Sub-mode and Color Flag (Byte 4)
+
+##### High nibble (4 bits): Effect sub-mode
+
+Value | Sub-mode | Description | Notes
+------|---------|-------------|------
+0 | upright | Bars rendered vertically, bottom to top | Not very usable
+1 | separate | Bars rendered horizontally from center outward | Slightly better
+2 | cross | Bars rendered horizontally, left to right | Best visualization
+
+##### Low nibble (4 bits): Color flag
+
+Value | Meaning
+------|--------
+1 | Rainbow (cycling rainbow colors)
+2 | Red bars on green background
+3 | Red bars on black background
+4 | Custom RGB on black background
+
+**Note:** RGB components (bytes 5–7) are only used when the color flag is set to `4`.
+
+### 2. Music Data Packets
+
+Once music mode is active, the keyboard expects continuous music data packets in the following format:
+
+```0d000000000000f2 [bar1] [bar2] [bar3] [bar4] [bar5] [bar6] ... 0x00 padding up to 64 bytes total```
+
+#### Packet Structure (64 bytes)
+
+Bytes | Description
+------|------------
+0–6 | Fixed header `0d000000000000`
+7 | Checksum byte (`f2`)
+8–13 | Bar values 1 to 6
+14–63 | Padding with `0x00`
+
+**Note:**  
+You may populate more bar values if needed, but the best visual results are achieved with horizontal rendering. In this case, each of the 6 bars maps to one keyboard row (packet bytes 8–13).  
+For vertical visualizations, up to 16 bars can be used.
+
+#### Bar Values
+
+- Each bar byte represents the intensity level of a single lighting bar.
+- The maximum recommended value for horizontal visualizations is `0x19` (decimal 25).
+- The firmware applies **no processing or scaling** to bar values.
+- Interpretation of bars (bass peak, mids, treble, volume, dynamics, etc.) is entirely handled in user-space.
+
+### 3. Recommended Music Modes for Bar Display
+
+Mode | Description | Notes
+-----|-------------|------
+`music-edm / cross` (sub-mode 2) | Bars displayed horizontally from left to right | Best overall visualization
+`music-edm / upright` (sub-mode 0) | Bars displayed vertically from bottom to top | Confusing due to keyboard column layout
+`music-edm / separate` (sub-mode 1) | Bars expand horizontally from the center outward | Slightly better than vertical mode
+
+### 4. Usage Notes
+
+- The protocol supports **6 to 16 bar positions** depending on the horizontal or vertical visualization.
+- Bar semantics are fully user-defined.
+- The keyboard firmware simply renders the received bar values without any internal interpretation or recalculation.
